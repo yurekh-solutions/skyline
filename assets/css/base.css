@@ -1256,33 +1256,15 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 .footer-credit a:hover { color: #6FB6FF; border-color: #6FB6FF; }
 
 .admin-link {
-  /* "AI" credit chip — a compact glowing badge so it reads as an AI-made mark */
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  color: #eaf3ff;
+  /* "AI" credit link — inline, on the same line as "Yurekh Solutions /" */
+  color: var(--accent-lite);
   font-weight: 700;
-  font-size: .78rem;
-  letter-spacing: .08em;
-  border: 1px solid rgba(111, 182, 255, .45);
-  border-radius: 999px;
-  padding: .42rem .9rem;
-  background: linear-gradient(135deg, rgba(47, 128, 237, .30), rgba(111, 182, 255, .14));
-  box-shadow: 0 0 0 1px rgba(111, 182, 255, .10), 0 6px 18px -10px rgba(47, 128, 237, .6);
-  transition: all .2s ease;
+  letter-spacing: .02em;
+  border-bottom: 1px solid rgba(86, 168, 245, .4);
+  transition: color .2s ease, border-color .2s ease;
 }
-.admin-link::before {
-  content: "";
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent-lite);
-  box-shadow: 0 0 8px 1px var(--accent-lite);
-}
-.admin-link:hover {
-  color: #fff;
-  border-color: var(--accent);
-  background: linear-gradient(135deg, rgba(47, 128, 237, .46), rgba(111, 182, 255, .24));
-  box-shadow: 0 0 22px -6px rgba(111, 182, 255, .65);
-}
+.admin-link:hover { color: #6FB6FF; border-color: #6FB6FF; }
+.footer-credit .credit-slash { color: var(--accent-lite); }
 
 .noscript-bar {
   margin: 1rem auto;

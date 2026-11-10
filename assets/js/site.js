@@ -39,13 +39,18 @@
     var bases = $$('.footer-base');
     bases.forEach(function (base) {
       if ($('.footer-credit', base)) return;
+      /* reuse the page's own admin-link href so the relative path stays correct
+         (../admin.html under services/, admin.html at the root) */
+      var admin = $('.admin-link', base);
+      var adminHref = admin ? (admin.getAttribute('href') || 'admin.html') : 'admin.html';
       var credit = document.createElement('p');
       credit.className = 'footer-credit';
       credit.innerHTML =
-        'Designed &amp; developed by <a href="https://yurekh.com/" target="_blank" rel="noopener">Yurekh Solutions</a>';
-      var admin = $('.admin-link', base);
-      if (admin) base.insertBefore(credit, admin);
-      else base.appendChild(credit);
+        'Designed &amp; developed by <a href="https://yurekh.com/" target="_blank" rel="noopener">Yurekh Solutions</a>' +
+        ' <span class="credit-slash" aria-hidden="true">/</span> ' +
+        '<a class="admin-link" href="' + adminHref + '">AI</a>';
+      if (admin) admin.remove();
+      base.appendChild(credit);
     });
   }
 
