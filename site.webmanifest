@@ -1,0 +1,21 @@
+{
+  "name": "Skyline Solution Enterprises",
+  "short_name": "Skyline",
+  "description": "Company registration, GST, licences, loans, insurance and travel bookings under one desk in Santacruz East, Mumbai.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#eaf1f8",
+  "theme_color": "#eaf1f8",
+  "lang": "en-IN",
+  "categories": ["business", "finance", "travel"],
+  "icons": [
+    {
+      "src": "assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

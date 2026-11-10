@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /assets/tools/
+
+# Change this line to your live domain after deployment
+Sitemap: https://www.skylinesolutionenterprises.in/sitemap.xml
