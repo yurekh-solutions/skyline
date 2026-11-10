@@ -307,6 +307,7 @@
       var record = {
         id: uid('L'),
         type: 'enquiry',
+        channel: 'form',
         name: clean(input.name, 80),
         phone: phone,
         email: clean(input.email, 120).toLowerCase(),
@@ -317,6 +318,64 @@
         createdAt: now,
         updatedAt: now,
         source: sourceInfo(),
+        ua: (navigator.userAgent || '').slice(0, 180)
+      };
+
+      write(KEYS.leads, rows.concat([record]));
+      enqueue('lead', record);
+      bump({ lastLeadAt: now });
+
+      send('lead', record).then(function (r) {
+        if (r.delivered) {
+          var queue = outboxAll().filter(function (q) { return q.record.id !== record.id; });
+          write(KEYS.outbox, queue);
+        }
+        bump({ lastDelivery: r.delivered ? r.transport : 'pending' });
+      });
+
+      return { record: record, duplicate: false };
+    },
+
+    /* ---------- a WhatsApp or call tap, logged as a lead -------------------
+       The visitor never typed anything, so there is no name or number to
+       store. What we DO know is which button, which service page and when —
+       which is exactly what the desk needs to see where the interest came
+       from. It lands in the same leads list as form enquiries, tagged with a
+       channel, and follows the identical delivery path. */
+    addTap: function (input) {
+      var channel = input.channel === 'call' ? 'call' : 'whatsapp';
+      var rows = leads.all();
+      var now = new Date().toISOString();
+      var src = sourceInfo();
+      var page = src.page || '';
+      var service = clean(input.service, 80);
+
+      /* the same button tapped on the same page inside 5 minutes = one touch,
+         so an impatient double-click cannot flood the list */
+      var dupe = rows.filter(function (r) {
+        return r.channel === channel && (r.source || {}).page === page &&
+          (new Date(now) - new Date(r.createdAt)) < 5 * 60 * 1000;
+      })[0];
+      if (dupe) return { record: dupe, duplicate: true };
+
+      var detail = channel === 'call'
+        ? 'Called ' + (clean(input.target, 20) || 'the desk number')
+        : 'Opened WhatsApp';
+
+      var record = {
+        id: uid('L'),
+        type: 'enquiry',
+        channel: channel,
+        name: '',
+        phone: '',
+        email: '',
+        service: service,
+        message: detail + (service ? ' — ' + service : '') + ' · from ' + (page || 'this page'),
+        status: 'new',
+        note: '',
+        createdAt: now,
+        updatedAt: now,
+        source: src,
         ua: (navigator.userAgent || '').slice(0, 180)
       };
 
@@ -408,6 +467,7 @@
       var record = {
         id: id,
         type: 'enquiry',
+        channel: input.channel === 'call' || input.channel === 'whatsapp' ? input.channel : 'form',
         name: clean(input.name, 80),
         phone: normalisePhone(input.phone),
         email: clean(input.email, 120).toLowerCase(),
@@ -542,11 +602,16 @@
         byStatus[st] = (byStatus[st] || 0) + 1;
       });
       var weekAgo = Date.now() - 7 * 864e5;
+      /* taps only — a record with no channel could only have come from the form */
+      var taps = { whatsapp: 0, call: 0 };
+      l.forEach(function (row) { if (row.channel === 'whatsapp' || row.channel === 'call') taps[row.channel]++; });
       return {
         leads: l.length,
         newLeads: byStatus.new || 0,
         contacted: byStatus.contacted || 0,
         closed: byStatus.closed || 0,
+        whatsappTaps: taps.whatsapp,
+        callTaps: taps.call,
         reviews: r.length,
         pendingReviews: r.filter(function (x) { return x.status === 'pending'; }).length,
         lastWeek: l.filter(function (x) { return new Date(x.createdAt).getTime() > weekAgo; }).length,

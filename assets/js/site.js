@@ -22,6 +22,7 @@
     initDesks();
     initServiceFilter();
     initWhatsAppLinks();
+    initTapTracking();
     initStars();
     initReviewForm();
     initEnquiryForm();
@@ -325,6 +326,48 @@
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
     });
+  }
+
+  /* ------------------------------------------------------------------
+     A visitor who taps WhatsApp or the phone number never fills the form,
+     so without this the desk sees nothing at all. Every tap is logged as a
+     lead with its channel and the page it came from, which is what tells us
+     whether the interest started on, say, the GST page or the contact page.
+     Capture phase matters: the browser is about to hand off to WhatsApp or
+     the dialer, and on a tel: link the page can be gone before a bubbled
+     listener would ever fire. */
+  function initTapTracking() {
+    if (!STORE || !STORE.addTap) return;
+
+    document.addEventListener('click', function (e) {
+      var link = e.target && e.target.closest ? e.target.closest('a') : null;
+      if (!link || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      var href = link.getAttribute('href') || '';
+      var channel = link.hasAttribute('data-wa') ? 'whatsapp'
+        : href.indexOf('tel:') === 0 ? 'call' : '';
+      if (!channel) return;
+
+      STORE.addTap({
+        channel: channel,
+        service: pageService(),
+        target: channel === 'call' ? href.slice(4).replace(/[^\d+]/g, '').replace(/^\+91/, '') : ''
+      });
+    }, true);
+  }
+
+  /* Service pages carry the service name in the H1 ("GST Registration in
+     Santacruz East, Mumbai"). Other pages have no single service, so the
+     recorded page path is enough and we leave the field empty. */
+  function pageService() {
+    if ((window.location.pathname || '').indexOf('/services/') === -1) return '';
+    var h1 = $('h1');
+    if (!h1) return '';
+    return (h1.textContent || '')
+      .replace(/\s+[—-]\s.*$/, '')
+      .replace(/\s+in\s+(Santacruz East,\s*)?Mumbai\b.*$/i, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   /* ------------------------------------------------------------------ */

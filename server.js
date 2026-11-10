@@ -192,6 +192,8 @@ function buildRecord(kind, body) {
   return {
     id,
     type: 'enquiry',
+    /* how the touch arrived — the form, a WhatsApp tap, or a call tap */
+    channel: ['whatsapp', 'call'].indexOf(body.channel) > -1 ? body.channel : 'form',
     name: text(body.name, 80),
     phone: phone(body.phone),
     email: text(body.email, 120).toLowerCase(),
@@ -429,10 +431,15 @@ const server = http.createServer((req, res) => {
          identity and the audit timestamps is up for revision here */
       const allowed = kind === 'review'
         ? ['name', 'initials', 'service', 'rating', 'text', 'status']
-        : ['name', 'phone', 'email', 'service', 'message', 'status', 'note'];
+        : ['name', 'phone', 'email', 'service', 'message', 'status', 'note', 'channel'];
       allowed.forEach((key) => {
         if (body[key] === undefined) return;
         if (key === 'rating') { rows[i][key] = Math.min(5, Math.max(1, parseInt(body[key], 10) || 5)); return; }
+        if (key === 'channel') {
+          const via = String(body[key]);
+          if (['form', 'whatsapp', 'call'].indexOf(via) > -1) rows[i][key] = via;
+          return;
+        }
         if (key === 'phone') { rows[i][key] = phone(body[key]); return; }
         if (key === 'email') { rows[i][key] = text(body[key], 120).toLowerCase(); return; }
         if (key === 'status') {

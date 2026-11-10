@@ -78,6 +78,8 @@
       <div class="stat"><span>Waiting for first contact</span><strong data-stat="newLeads">0</strong></div>
       <div class="stat"><span>Last 7 days</span><strong data-stat="lastWeek">0</strong></div>
       <div class="stat"><span>Reviews pending</span><strong data-stat="pendingReviews">0</strong></div>
+      <div class="stat"><span>WhatsApp taps</span><strong data-stat="whatsappTaps">0</strong></div>
+      <div class="stat"><span>Call taps</span><strong data-stat="callTaps">0</strong></div>
     </section>
 
     <nav class="tabs" aria-label="Dashboard sections">
@@ -111,6 +113,15 @@
           <label for="f-service">Service</label>
           <select id="f-service"><option value="">All services</option></select>
         </div>
+        <div class="field">
+          <label for="f-channel">Channel</label>
+          <select id="f-channel">
+            <option value="">All</option>
+            <option value="form">Form</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="call">Call</option>
+          </select>
+        </div>
         <div class="toolbar-actions">
           <button class="btn btn-primary btn-sm" type="button" data-new-lead>Add enquiry</button>
           <button class="btn btn-quiet" type="button" data-pull-now>Sync from server</button>
@@ -127,6 +138,7 @@
           <thead>
             <tr>
               <th scope="col">Received</th>
+              <th scope="col">Channel</th>
               <th scope="col">Name</th>
               <th scope="col">Phone</th>
               <th scope="col">Service</th>
@@ -191,7 +203,7 @@
     <div class="editor-grid">
       <div class="field">
         <label for="e-name">Name</label>
-        <input id="e-name" data-e="name" type="text" maxlength="80" autocomplete="off" required>
+        <input id="e-name" data-e="name" type="text" maxlength="80" autocomplete="off">
       </div>
       <div class="field" data-editor-group="lead">
         <label for="e-phone">Phone</label>
@@ -200,6 +212,14 @@
       <div class="field" data-editor-group="lead">
         <label for="e-email">Email</label>
         <input id="e-email" data-e="email" type="email" maxlength="120" autocomplete="off">
+      </div>
+      <div class="field" data-editor-group="lead">
+        <label for="e-channel">Channel</label>
+        <select id="e-channel" data-e="channel">
+          <option value="form">Form</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="call">Call</option>
+        </select>
       </div>
       <div class="field">
         <label for="e-service">Service</label>

@@ -60,7 +60,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-bottom: 1.75rem;
 }
-@media (min-width: 900px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .stat {
   padding: 1.1rem 1.2rem;
@@ -125,7 +125,7 @@
 }
 .toolbar .field { margin-bottom: 0; }
 @media (min-width: 900px) {
-  .toolbar { grid-template-columns: minmax(0, 2fr) 150px 200px auto; align-items: end; }
+  .toolbar { grid-template-columns: minmax(0, 2fr) 150px 200px 150px auto; align-items: end; }
   .toolbar-actions { grid-column: auto; }
 }
 .toolbar-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
@@ -185,6 +185,12 @@
 .badge-contacted { color: #1B5E9E; border-color: rgba(27, 94, 158, .3); background: rgba(108, 180, 238, .16); }
 .badge-closed, .badge-approved { color: #116B3B; border-color: rgba(17, 107, 59, .3); background: rgba(92, 219, 149, .18); }
 .badge-archived, .badge-hidden { color: var(--faint); background: rgba(16, 34, 63, .05); }
+
+/* channel badges — how the touch reached us (form, WhatsApp tap, call tap).
+   Same rule as the status badges: deep ink on a pale tint so the label reads. */
+.badge-wa { color: #0B5B37; border-color: rgba(11, 91, 55, .3); background: rgba(37, 211, 102, .16); }
+.badge-call { color: #1B5E9E; border-color: rgba(27, 94, 158, .3); background: rgba(108, 180, 238, .16); }
+.badge-form { color: #4A3A87; border-color: rgba(74, 58, 135, .28); background: rgba(147, 124, 232, .16); }
 
 .row-actions { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
 .icon-btn {
@@ -483,12 +489,12 @@ body:not(.is-unlocked) [data-lock] { display: none; }
 /* Tablet (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .stats {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: .85rem;
   }
   
   .toolbar {
-    grid-template-columns: 1fr 140px;
+    grid-template-columns: 1fr 140px 150px;
     gap: .75rem;
   }
   
@@ -508,11 +514,11 @@ body:not(.is-unlocked) [data-lock] { display: none; }
 /* Desktop (1024px+) */
 @media (min-width: 1024px) {
   .stats {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .toolbar {
-    grid-template-columns: minmax(0, 2fr) 150px 200px auto;
+    grid-template-columns: minmax(0, 2fr) 150px 200px 150px auto;
   }
   
   .review-admin-list {
@@ -613,7 +619,7 @@ body:not(.is-unlocked) [data-lock] { display: none; }
   }
   
   .stats {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: .65rem;
   }
   
@@ -677,6 +683,9 @@ body:not(.is-unlocked) [data-lock] { display: none; }
 [data-theme="dark"] .badge-contacted { color: #8CC4FF; border-color: rgba(140, 196, 255, .34); background: rgba(108, 180, 238, .12); }
 [data-theme="dark"] .badge-closed, [data-theme="dark"] .badge-approved { color: #7FE0A8; border-color: rgba(127, 224, 168, .34); background: rgba(92, 219, 149, .12); }
 [data-theme="dark"] .badge-archived, [data-theme="dark"] .badge-hidden { color: var(--muted); background: rgba(255, 255, 255, .06); }
+[data-theme="dark"] .badge-wa { color: #6BE2A6; border-color: rgba(107, 226, 166, .34); background: rgba(37, 211, 102, .12); }
+[data-theme="dark"] .badge-call { color: #8CC4FF; border-color: rgba(140, 196, 255, .34); background: rgba(108, 180, 238, .12); }
+[data-theme="dark"] .badge-form { color: #C4B5FD; border-color: rgba(196, 181, 253, .34); background: rgba(147, 124, 232, .12); }
 [data-theme="dark"] .review-admin .rating .off { color: rgba(255, 255, 255, .28); }
 [data-theme="dark"] .warn { color: #F3CE93 !important; background: rgba(233, 180, 106, .12); }
 [data-theme="dark"] .danger-title { color: #FF9A8A !important; }

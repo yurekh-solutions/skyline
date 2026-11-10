@@ -2,10 +2,13 @@
 data/
 
 # browser test output (assets/tools/responsive-audit.js --shots,
-# assets/tools/test-admin-crud.js --shots)
+# assets/tools/test-admin-crud.js --shots, and ad-hoc verification shots)
 design-*.png
 admin-leads.png
 admin-editor.png
+admin-*.png
+verify-*.png
+footer-*.png
 
 # editor / OS noise
 .vscode/

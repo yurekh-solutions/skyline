@@ -277,8 +277,8 @@
 
   /* ------------------------------------------------------------------ */
   function initToolbar() {
-    var q = $('#q'), fs = $('#f-status'), fv = $('#f-service');
-    [q, fs, fv].forEach(function (el) {
+    var q = $('#q'), fs = $('#f-status'), fv = $('#f-service'), fc = $('#f-channel');
+    [q, fs, fv, fc].forEach(function (el) {
       if (!el) return;
       el.addEventListener('input', renderLeads);
       el.addEventListener('change', renderLeads);
@@ -365,7 +365,7 @@
     var modal = $('[data-editor]');
     if (!modal) return;
     var record = id ? (kind === 'review' ? STORE.reviews.get(id) : STORE.leads.get(id)) : null;
-    editing = { kind: kind, id: record ? record.id : '', createdAt: record ? record.createdAt : '' };
+    editing = { kind: kind, id: record ? record.id : '', createdAt: record ? record.createdAt : '', channel: record ? channelOf(record) : 'form' };
 
     var title = $('[data-editor-title]');
     if (title) title.textContent = record ? (kind === 'review' ? 'Edit review' : 'Edit enquiry') : (kind === 'review' ? 'Add review' : 'Add enquiry');
@@ -400,6 +400,7 @@
     efVal('name', record && record.name);
     efVal('phone', record && record.phone);
     efVal('email', record && record.email);
+    efVal('channel', editing.channel);
     efVal('service', record && record.service);
     efVal('status', record ? record.status : (kind === 'review' ? 'pending' : 'new'));
     efVal('rating', record && record.rating != null ? record.rating : 5);
@@ -428,8 +429,13 @@
     var err = $('[data-editor-error]');
     var nameEl = ef('name');
     var name = nameEl ? nameEl.value.trim() : '';
-    if (!name) {
-      if (err) err.textContent = 'A name is needed before this record can be saved.';
+    var phoneEl = ef('phone');
+    var hasPhone = editing.kind === 'lead' && phoneEl && phoneEl.value.replace(/\D/g, '');
+    /* a WhatsApp or call tap lands with no details at all, so the desk closes
+       the loop by typing the number they called back — either identifier is
+       enough, but a record still has to point at somebody */
+    if (!name && !hasPhone) {
+      if (err) err.textContent = 'A name or a phone number is needed before this record can be saved.';
       if (nameEl) nameEl.focus();
       return;
     }
@@ -440,6 +446,7 @@
       name: name,
       phone: efValOf('phone'),
       email: efValOf('email'),
+      channel: efValOf('channel') || editing.channel || 'form',
       service: efValOf('service'),
       message: efValOf('message'),
       note: efValOf('note'),
@@ -468,6 +475,8 @@
   var LEAD_FIELDS = [
     { key: 'createdAt', label: 'Received', get: function (r) { return r.createdAt; } },
     { key: 'id', label: 'Reference' },
+    { key: 'channel', label: 'Channel', get: function (r) { return channelOf(r); } },
+    { key: 'page', label: 'From Page', get: function (r) { return (r.source || {}).page || ''; } },
     { key: 'name', label: 'Name' },
     { key: 'phone', label: 'Phone' },
     { key: 'email', label: 'Email' },
@@ -497,14 +506,33 @@
     var q = ($('#q') ? $('#q').value : '').trim().toLowerCase();
     var st = $('#f-status') ? $('#f-status').value : '';
     var sv = $('#f-service') ? $('#f-service').value : '';
+    var ch = $('#f-channel') ? $('#f-channel').value : '';
 
     return sorted().filter(function (r) {
       if (st && (r.status || 'new') !== st) return false;
       if (sv && r.service !== sv) return false;
+      if (ch && channelOf(r) !== ch) return false;
       if (!q) return true;
-      var hay = [r.name, r.phone, r.email, r.service, r.message, r.note, r.id, (r.source || {}).utm].join(' ').toLowerCase();
+      var hay = [r.name, r.phone, r.email, r.service, r.message, r.note, r.id, channelOf(r), (r.source || {}).page, (r.source || {}).utm].join(' ').toLowerCase();
       return q.split(/\s+/).every(function (term) { return hay.indexOf(term) > -1; });
     });
+  }
+
+  /* Records saved before tap tracking have no channel at all — they could only
+     have come from the form, so that is what we show for them. */
+  function channelOf(r) {
+    return r.channel === 'whatsapp' || r.channel === 'call' ? r.channel : 'form';
+  }
+
+  var CHANNEL_LABEL = { form: 'Form', whatsapp: 'WhatsApp', call: 'Call' };
+
+  function channelCell(r) {
+    var ch = channelOf(r);
+    var page = (r.source || {}).page || '';
+    return '<td data-label="Channel"><span class="badge badge-' + (ch === 'whatsapp' ? 'wa' : ch) + '">' +
+      CHANNEL_LABEL[ch] + '</span>' +
+      (page ? '<span class="ref" title="' + esc(page) + '">' + esc(page.replace(/^\/+/, '').replace(/\.html$/i, '')) + '</span>' : '') +
+      '</td>';
   }
 
   function filteredReviews() {
@@ -537,6 +565,8 @@
       reviews: s.reviews,
       newLeads: s.newLeads,
       lastWeek: s.lastWeek,
+      whatsappTaps: s.whatsappTaps,
+      callTaps: s.callTaps,
       pendingReviews: s.pendingReviews,
       outbox: s.outbox
     };
@@ -572,8 +602,9 @@
       var tr = document.createElement('tr');
       tr.innerHTML =
         '<td data-label="Received"><span class="when">' + when(r.createdAt) + '</span><span class="ref">' + esc(r.id) + '</span></td>' +
-        '<td data-label="Name">' + esc(r.name) + (r.email ? '<span class="ref">' + esc(r.email) + '</span>' : '') + '</td>' +
-        '<td data-label="Phone"><a href="tel:+91' + esc(r.phone) + '">' + esc(r.phone) + '</a></td>' +
+        channelCell(r) +
+        '<td data-label="Name">' + (r.name ? esc(r.name) : '<span class="ref">—</span>') + (r.email ? '<span class="ref">' + esc(r.email) + '</span>' : '') + '</td>' +
+        '<td data-label="Phone">' + (r.phone ? '<a href="tel:+91' + esc(r.phone) + '">' + esc(r.phone) + '</a>' : '—') + '</td>' +
         '<td data-label="Service">' + esc(r.service || '—') + '</td>' +
         '<td data-label="Message" class="msg">' + esc(r.message || '—') + '</td>' +
         '<td data-label="Status">' + statusCell(r) + '</td>' +
