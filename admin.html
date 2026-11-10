@@ -27,7 +27,7 @@
       <span class="brand-text"><strong>Skyline</strong><em>Admin — leads &amp; reviews</em></span>
     </a>
     <nav class="main-nav" aria-label="Admin">
-      <button class="btn btn-ghost btn-sm" type="button" data-lock>Lock dashboard</button>
+      <button class="btn btn-ghost btn-sm" type="button" data-lock>Logout</button>
       <a class="btn btn-ghost btn-sm" href="index.html">Back to site</a>
     </nav>
   </div>
@@ -38,9 +38,9 @@
   <!-- ================= GATE ================= -->
   <section class="gate" data-gate>
     <form class="panel gate-card" data-gate-form novalidate>
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Internal access</p>
-      <h1>Lead dashboard</h1>
-      <p class="gate-note">Enter the admin passcode to open the enquiries and reviews stored by this website. The code is checked by <code>server.js</code> and lives in <code>data/admin-passcode.txt</code> — never in a file the browser downloads.</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Admin access</p>
+      <h1>Login to Dashboard</h1>
+      <p class="gate-note">Enter your passcode to open the dashboard. The passcode is not written anywhere on the website.</p>
       <div class="field">
         <label for="passcode">Passcode</label>
         <div class="pw-wrap">
@@ -60,7 +60,7 @@
         </div>
         <p class="field-error" data-gate-error role="alert"></p>
       </div>
-      <button class="btn btn-primary btn-block" type="submit">Open dashboard</button>
+      <button class="btn btn-primary btn-block" type="submit">Login</button>
       <p class="gate-hint" data-storage-note></p>
     </form>
   </section>

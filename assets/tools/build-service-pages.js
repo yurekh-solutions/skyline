@@ -24,6 +24,8 @@ vm.runInContext(fs.readFileSync(path.join(ROOT, 'assets', 'js', 'data.js'), 'utf
 const DATA = sandbox.window.SERVICE_DATA;
 const DESKS = DATA.desks;
 const NAMES = Object.keys(DATA.services);
+/* Offered at the desk but quoted case by case, so they carry no page. */
+const EXTRAS = DATA.extras || [];
 
 /* desk id -> ordered service names */
 const BY_DESK = {};
@@ -115,6 +117,7 @@ const FOOTER = (rel) => `<footer class="site-footer">
         <span class="brand-text"><strong>Skyline</strong><em>Solution Enterprises</em></span>
       </a>
       <p>Government services, loans, insurance and travel — under one roof in Santacruz East, Mumbai.</p>
+      <p class="footer-motto">A Friend In Need Is A Friend Indeed</p>
     </div>
 
     <nav class="footer-nav" aria-label="Pages">
@@ -125,15 +128,17 @@ const FOOTER = (rel) => `<footer class="site-footer">
         <li><a href="${rel}reviews.html">Reviews</a></li>
         <li><a href="${rel}enquire.html">Enquire</a></li>
         <li><a href="${rel}contact.html">Contact</a></li>
-        <li><a href="${rel}services/">All service pages</a></li>
+        <li><a href="${rel}services/index.html">All service pages</a></li>
       </ul>
     </nav>
 
     <div class="footer-contact">
       <h4>Desk</h4>
       <a href="tel:+918271895469">8271895469</a>
+      <a href="tel:+918369942408">8369942408</a>
       <a href="mailto:skylinesolutionenterprises@outlook.com">skylinesolutionenterprises@outlook.com</a>
       <p>Owner — Sandeep Sharma<br>Co-Owner — Tanay Bhimra</p>
+      <p class="footer-centres">Aadhaar enrolment, CSC Digital Seva Kendra and Aaple Sarkar filings are handled at the desk.</p>
     </div>
   </div>
 
@@ -268,6 +273,7 @@ function servicePage(name) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
+<script>(function(){try{if(localStorage.getItem('skyline-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 <link rel="stylesheet" href="${rel}assets/css/base.css">
 <link rel="stylesheet" href="${rel}assets/css/sections.css">
 
@@ -427,7 +433,7 @@ ${docs}
 ${relatedLinks}
       </div>
 
-      <p class="desks-footnote">Everything on this desk: <a class="text-link" href="${rel}services.html#desk-${s.desk}">${esc(desk.label)}</a> · All 29 services: <a class="text-link" href="${rel}services/">services index</a></p>
+      <p class="desks-footnote">Everything on this desk: <a class="text-link" href="${rel}services.html#desk-${s.desk}">${esc(desk.label)}</a> · All 29 services: <a class="text-link" href="${rel}services/index.html">services index</a></p>
     </div>
   </section>
 
@@ -470,6 +476,21 @@ ${items}
         <p class="count">${BY_DESK[d.id].length} services</p>
       </article>`;
   }).join('\n');
+
+  /* rendered from data.js so the shortlist and the dropdowns can never drift */
+  const extraItems = EXTRAS.map((e) => `          <li>${esc(e.name)}</li>`).join('\n');
+  const extrasBlock = EXTRAS.length ? `
+  <section class="section" aria-labelledby="extras-h">
+    <div class="wrap">
+      <div class="extras-note">
+        <h2 id="extras-h">Also handled at the desk</h2>
+        <p>Quoted case by case, so these have no page of their own. Send the details and we confirm the fee and the timeline.</p>
+        <ul class="extras-list">
+${extraItems}
+        </ul>
+      </div>
+    </div>
+  </section>` : '';
 
   const list = DESKS.map((d) => ({
     '@type': 'ListItem',
@@ -519,6 +540,7 @@ ${items}
 <link rel="icon" href="${rel}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="${rel}site.webmanifest">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
+<script>(function(){try{if(localStorage.getItem('skyline-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 <link rel="stylesheet" href="${rel}assets/css/base.css">
 <link rel="stylesheet" href="${rel}assets/css/sections.css">
 
@@ -560,9 +582,10 @@ ${HEADER(rel)}
       <div class="desk-cards">
 ${groups}
       </div>
-      <p class="desks-footnote">Missing something? Call <a class="text-link" href="tel:+918271895469">8271895469</a> — if it involves paperwork, we most likely handle it.</p>
+      <p class="desks-footnote">Missing something? Call <a class="text-link" href="tel:+918271895469">8271895469</a> or <a class="text-link" href="tel:+918369942408">8369942408</a> — if it involves paperwork, we most likely handle it.</p>
     </div>
   </section>
+${extrasBlock}
 </main>
 
 ${FOOTER(rel)}
@@ -615,6 +638,13 @@ const ROOT_BANNERS = {
   'contact.html': 'company', 'about.html': 'company'
 };
 const PHONE_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* Visiting-card details. The generated footer already carries them, so each
+   insertion is guarded by a presence check — running the build again can never
+   double a line, and the root pages (maintained by hand) get the same copy. */
+const FOOTER_PHONE2 = '<a href="tel:+918369942408">8369942408</a>';
+const FOOTER_MOTTO = '<p class="footer-motto">A Friend In Need Is A Friend Indeed</p>';
+const FOOTER_CENTRES = '<p class="footer-centres">Aadhaar enrolment, CSC Digital Seva Kendra and Aaple Sarkar filings are handled at the desk.</p>';
 function refreshDesign(html, category) {
   html = html.replace(/https:\/\/fonts.googleapis.com\/css2\?[^"\s]+/g,
     'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap');
@@ -633,8 +663,25 @@ function refreshDesign(html, category) {
     const id = (m.match(/photo-([0-9a-z]+-[0-9a-z]+)/) || [])[1];
     return id ? bannerTag(id) : m;
   });
-  return html.replace(/(<a class="btn btn-primary btn-sm nav-cta"[^>]*>)8271895469/g,
+  const out = html.replace(/(<a class="btn btn-primary btn-sm nav-cta"[^>]*>)8271895469/g,
     '$1' + PHONE_ICON + ' 8271895469');
+
+  /* second desk line, straight after the primary one in .footer-contact.
+     The pattern needs the bare tel anchor followed by the mailto anchor, which
+     only ever describes the footer — the contact cards carry a class.
+     Line endings are captured, not assumed: the root pages are a mix of CRLF
+     and LF, and a hard-coded \n silently matched nothing on the CRLF files. */
+  let withPhone2 = out;
+  if (!out.includes('tel:+918369942408')) {
+    withPhone2 = out.replace(/(<a href="tel:\+918271895469">[\s\S]{0,1400}?<\/a>)(\r?\n)([ \t]*)(<a href="mailto:)/,
+      '$1$2$3' + FOOTER_PHONE2 + '$2$3$4');
+  }
+  const withMotto = withPhone2.includes('footer-motto') ? withPhone2
+    : withPhone2.replace(/(<p>Government services, loans, insurance and travel[^\n]*<\/p>)(\r?\n)([ \t]*)/,
+        '$1$2$3' + FOOTER_MOTTO + '$2$3');
+  return withMotto.includes('footer-centres') ? withMotto
+    : withMotto.replace(/(<p>Owner — Sandeep Sharma<br>Co-Owner — Tanay Bhimra<\/p>)(\r?\n)([ \t]*)/,
+        '$1$2$3' + FOOTER_CENTRES + '$2$3');
 }
 ['index.html', 'admin.html'].concat(Object.keys(ROOT_BANNERS)).forEach((file) => {
   const target = path.join(ROOT, file);

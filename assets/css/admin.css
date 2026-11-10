@@ -20,7 +20,7 @@
   font-size: .84em;
   padding: .1rem .35rem;
   border-radius: 6px;
-  background: rgba(39, 174, 96, .12);
+  background: rgba(47, 128, 237, .12);
   color: var(--accent-ink);
 }
 .gate-hint { margin-top: 1.1rem; font-size: .8rem; color: var(--faint); }
@@ -46,7 +46,7 @@
   cursor: pointer;
   transition: color .16s ease, background-color .16s ease, border-color .16s ease;
 }
-.pw-toggle:hover { color: var(--accent-ink-deep); background: rgba(39, 174, 96, .10); border-color: rgba(39, 174, 96, .3); }
+.pw-toggle:hover { color: var(--accent-ink-deep); background: rgba(47, 128, 237, .10); border-color: rgba(47, 128, 237, .3); }
 .pw-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .pw-toggle svg { width: 19px; height: 19px; display: block; }
 .pw-toggle .pw-eye-off { display: none; }
@@ -103,7 +103,7 @@
 .tab.is-active {
   background: linear-gradient(135deg, var(--accent-lite), var(--accent-ink));
   color: #fff;
-  box-shadow: 0 12px 24px -16px rgba(39, 174, 96, .8), var(--shadow-in);
+  box-shadow: 0 12px 24px -16px rgba(47, 128, 237, .8), var(--shadow-in);
 }
 
 /* ---------- panes ---------- */
@@ -244,7 +244,7 @@ select.status-select {
   padding: 1.6rem;
   text-align: center;
   color: var(--muted);
-  border: 1px dashed rgba(39, 174, 96, .34);
+  border: 1px dashed rgba(47, 128, 237, .34);
   border-radius: var(--radius-l);
   background: rgba(255, 255, 255, .6);
   margin-top: 1rem;
@@ -277,7 +277,7 @@ select.status-select {
   font-size: .8rem;
   color: #fff;
   background: linear-gradient(140deg, var(--accent-lite), var(--accent-ink));
-  box-shadow: 0 10px 20px -14px rgba(39, 174, 96, .9), var(--shadow-in);
+  box-shadow: 0 10px 20px -14px rgba(47, 128, 237, .9), var(--shadow-in);
 }
 .review-admin .review-who strong { display: block; font-family: var(--font-display); font-size: .96rem; font-weight: 600; }
 .review-admin .rating { color: var(--accent-ink-deep); letter-spacing: .08em; }

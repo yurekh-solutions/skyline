@@ -77,7 +77,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     if (!STORE) {
       var gateCard = $('.gate-card');
-      if (gateCard) gateCard.innerHTML = '<h1>Storage layer missing</h1><p class="gate-note">assets/js/leads.js and assets/js/config.js must load before this dashboard.</p>';
+      if (gateCard) gateCard.innerHTML = '<h1>Dashboard not ready</h1><p class="gate-note">The dashboard did not load. Please reload this page.</p>';
       return;
     }
     var year = $('[data-year]');
@@ -133,8 +133,8 @@
 
     if (note) {
       note.textContent = STORE.available
-        ? 'Enquiries and reviews live in data/leads.json + data/reviews.json on your server, and in this browser as a safety copy. A refresh never loses them.'
-        : 'This browser blocks local storage (private mode). Records will be kept in memory only until the tab closes.';
+        ? 'Everything you see here is saved on the computer that runs the site, so refreshing will not lose it.'
+        : 'This browser is not saving data, so records will be lost when you close the tab.';
     }
 
     var unlock = function () {
@@ -147,7 +147,7 @@
 
     var fail = function (message) {
       if (err) err.textContent = message;
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Open dashboard'; }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Login'; }
       var input = $('#passcode');
       if (input) { input.classList.add('is-invalid'); input.select(); input.focus(); }
     };
@@ -176,13 +176,13 @@
            Node server) all mean static hosting, so use the local gate. */
         if (r.status === 0 || r.status === 404 || r.status === 405) {
           if (value && value === String(CFG.adminPasscode || '')) { rememberLocal(true); unlock(); }
-          else if (CFG.adminPasscode) fail('That passcode does not match. Check assets/js/config.js.');
-          else fail('This site is hosted without its server, so the dashboard has nothing to log into. Run node server.js to get the shared lead store.');
+          else if (CFG.adminPasscode) fail('Wrong passcode. Please try again.');
+          else fail('The website is not running right now, so login is not available. Open the site first and try again.');
           return;
         }
         if (r.status === 200) { rememberLocal(true); unlock(); return; }
-        if (r.status === 429) { fail('Too many attempts — wait a few minutes and try again.'); return; }
-        fail((r.data && r.data.error) === 'wrong passcode' ? 'That passcode does not match this server.' : 'The dashboard could not be reached.');
+        if (r.status === 429) { fail('Too many wrong attempts. Please wait a few minutes and try again.'); return; }
+        fail((r.data && r.data.error) === 'wrong passcode' ? 'Wrong passcode. Please try again.' : 'Could not reach the dashboard. Please try again.');
       });
     });
 

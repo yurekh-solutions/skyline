@@ -16,6 +16,7 @@
     initYear();
     initTicker();
     initNav();
+    initThemeToggle();
     initFooterCredit();
     initReveal();
     initDesks();
@@ -49,6 +50,49 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* theme toggle — flip <html data-theme>, remember the choice, keep the
+     browser-chrome colour in sync. The first paint is already correct because
+     an inline snippet in every page's <head> applies the stored theme before
+     base.css finishes loading; this only builds and wires the button.
+     Dark is opt-in — we never read prefers-color-scheme, because auto-dark on
+     a phone is exactly what washed out the old light-only glass. */
+  var THEME_KEY = 'skyline-theme';
+  function initThemeToggle() {
+    var nav = $('#main-nav');
+    if (!nav || $('.theme-toggle', nav)) return;
+    var root = document.documentElement;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-toggle';
+    btn.setAttribute('aria-label', 'Switch colour theme');
+    btn.innerHTML =
+      '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' +
+      '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+
+    function sync() {
+      var dark = root.getAttribute('data-theme') === 'dark';
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('title', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', dark ? '#0A1520' : '#FEFDFB');
+    }
+
+    btn.addEventListener('click', function () {
+      var dark = root.getAttribute('data-theme') === 'dark';
+      if (dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'dark');
+      try { localStorage.setItem(THEME_KEY, dark ? 'light' : 'dark'); } catch (e) {}
+      sync();
+    });
+
+    /* sit just left of the phone CTA on desktop; on mobile the CTA is hidden so
+       the toggle lands beside the hamburger either way */
+    var cta = $('.nav-cta', nav);
+    if (cta) nav.insertBefore(btn, cta); else nav.appendChild(btn);
+    sync();
+  }
+
+  /* ------------------------------------------------------------------ */
   function initYear() {
     var el = $('[data-year]');
     if (el) el.textContent = String(new Date().getFullYear());
@@ -72,23 +116,38 @@
     var toggle = $('.nav-toggle');
 
     if (toggle && nav) {
+      /* the side drawer dims the page behind it. Built here rather than in the
+         markup so all ~38 pages pick it up from this one shared script. */
+      var backdrop = document.createElement('div');
+      backdrop.className = 'nav-backdrop';
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(backdrop);
+
       var closeDrawer = function (focusBack) {
         nav.classList.remove('nav-open');
+        backdrop.classList.remove('is-on');
         toggle.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('is-locked');
         if (focusBack) toggle.focus();
       };
       toggle.addEventListener('click', function () {
         var open = nav.classList.toggle('nav-open');
+        backdrop.classList.toggle('is-on', open);
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         document.body.classList.toggle('is-locked', open);
       });
+      backdrop.addEventListener('click', function () { closeDrawer(true); });
       $$('#main-nav .nav-list a').forEach(function (link) {
         link.addEventListener('click', function () { closeDrawer(false); });
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && nav.classList.contains('nav-open')) closeDrawer(true);
       });
+      /* the drawer only exists below 950px — carrying nav-open (and a locked body)
+         across that line would leave the page unscrollable with no way to close it */
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 950 && nav.classList.contains('nav-open')) closeDrawer(false);
+      }, { passive: true });
     }
 
     var onScroll = function () {
@@ -191,10 +250,16 @@
     var desks = deskCtl.desks;
     var chips = $$('.service-chip');
     var total = chips.length;
+    /* the page-less extras live in their own block under the desks, but a search
+       has to cover them too — otherwise "aadhaar" looks like a dead end */
+    var extras = $$('.extras-list li');
+    var extrasNote = $('.extras-note');
 
     var showAll = function () {
       chips.forEach(function (c) { c.classList.remove('is-hidden'); });
       desks.forEach(function (d) { d.classList.remove('is-hidden', 'is-match'); });
+      extras.forEach(function (li) { li.classList.remove('is-hidden'); });
+      if (extrasNote) extrasNote.classList.remove('is-hidden');
       if (count) count.textContent = 'Showing all ' + total + ' services';
     };
 
@@ -221,10 +286,22 @@
           if (!openTarget) openTarget = desk;
         }
       });
+
+      var extraHits = 0;
+      extras.forEach(function (li) {
+        var match = li.textContent.toLowerCase().indexOf(q) > -1;
+        li.classList.toggle('is-hidden', !match);
+        if (match) extraHits++;
+      });
+      if (extrasNote) extrasNote.classList.toggle('is-hidden', extraHits === 0);
+      shown += extraHits;
+
       if (count) {
+        /* "1 service matches" / "3 services match" — the verb agrees with the
+           number, so the singular path needs the -es, not the bare stem */
         count.textContent = shown
-          ? shown + ' service' + (shown === 1 ? '' : 's') + ' match “' + input.value.trim() + '”'
-          : 'No service matches “' + input.value.trim() + '” — call 8271895469 and describe it';
+          ? shown + ' service' + (shown === 1 ? ' matches' : 's match') + ' “' + input.value.trim() + '”'
+          : 'No service matches “' + input.value.trim() + '” — call 8271895469 or 8369942408 and describe it';
       }
     };
 

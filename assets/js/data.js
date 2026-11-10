@@ -1,7 +1,8 @@
 /* ==========================================================================
    Skyline Solution Enterprises — data.js
    The 29 services, grouped into 5 desks, each with the document checklist
-   shown in the tap-through modal and the typical filing timeline.
+   shown in the tap-through modal and the typical filing timeline, plus the
+   5 extras under `extras` that are handled at the desk without a page.
    ========================================================================== */
 
 window.SERVICE_DATA = {
@@ -11,6 +12,18 @@ window.SERVICE_DATA = {
     { id: 'loans', label: 'Loan & Finance', index: '03 / 05', blurb: 'The right lender, the right rate, with paperwork handled for you.' },
     { id: 'insurance', label: 'Insurance', index: '04 / 05', blurb: "Cover for the people and things you can't replace." },
     { id: 'travel', label: 'Travel Services', index: '05 / 05', blurb: 'From a city ride to a full tour — booked, planned and on time.' }
+  ],
+
+  /* Carried on the visiting card and handled at the desk, but quoted case by
+     case — so they appear in the shortlists and the enquiry dropdowns without
+     a page of their own. Kept out of `services` for that reason, which is why
+     the count of service pages stays 29. */
+  extras: [
+    { name: 'Senior Citizen Card', desk: 'government' },
+    { name: 'Aadhaar Service', desk: 'government' },
+    { name: 'RD & FD Deposit', desk: 'loans' },
+    { name: 'Website Development', desk: 'company' },
+    { name: 'App Development (Android / iOS)', desk: 'company' }
   ],
 
   services: {

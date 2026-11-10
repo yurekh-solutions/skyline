@@ -9,11 +9,17 @@ window.SITE_CONFIG = {
   brand: 'Skyline Solution Enterprises',
   siteUrl: 'https://www.skylinesolutionenterprises.in/',
   tagline: 'Paperwork, loans & journeys. One desk.',
+  /* Line carried on the visiting card, used under the brand and in the footer. */
+  motto: 'A Friend In Need Is A Friend Indeed',
 
   /* ---- contact ---------------------------------------------------- */
   phoneDisplay: '8271895469',
   phone: '+918271895469',
   whatsapp: '918271895469',          // country code + number, no "+" or spaces
+  /* Second desk line off the card. Voice only on purpose — WhatsApp stays on
+     the number above, so a customer never has to guess which one to message. */
+  phone2Display: '8369942408',
+  phone2: '+918369942408',
   email: 'skylinesolutionenterprises@outlook.com',
   address: 'Gate No 1, Hanuman Tekdi, Near Metro Station, Santacruz East, Mumbai 400055',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Hanuman+Tekdi+Gate+No+1+Santacruz+East+Mumbai+400055',

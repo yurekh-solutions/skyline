@@ -7,7 +7,7 @@
 .grid { display: grid; gap: 1.25rem; }
 .grid > *, .reviews-layout > *, .enquire-layout > *, .spec-grid > * { min-width: 0; }
 .section-soft {
-  background: linear-gradient(180deg, rgba(248, 246, 243, .80), rgba(255, 255, 255, .40));
+  background: var(--section-soft);
   border-block: 1px solid var(--glass-border);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
@@ -28,8 +28,8 @@
   font-weight: 600;
   letter-spacing: .08em;
   color: var(--accent-ink-deep);
-  background: rgba(39, 174, 96, .10);
-  border: 1px solid rgba(39, 174, 96, .20);
+  background: rgba(47, 128, 237, .10);
+  border: 1px solid rgba(47, 128, 237, .20);
 }
 @media (min-width: 780px) { .section-head { gap: 1rem; } }
 
@@ -48,10 +48,10 @@
 }
 .desk:hover { 
   transform: translateY(-3px); 
-  box-shadow: 0 16px 48px rgba(39, 174, 96, .12), var(--shadow-in); 
-  border-color: rgba(39, 174, 96, .25);
+  box-shadow: 0 16px 48px rgba(47, 128, 237, .12), var(--shadow-in); 
+  border-color: rgba(47, 128, 237, .25);
 }
-.desk.is-open { border-color: var(--accent); background: rgba(255, 255, 255, .95); }
+.desk.is-open { border-color: var(--accent); background: var(--surface-hover); }
 
 /* heading wrapper only carries the button — the visual type comes from .desk-title */
 .desk-heading { font-size: inherit; font-weight: inherit; line-height: inherit; letter-spacing: normal; }
@@ -87,8 +87,8 @@
   /* same tinted rounded square as the 01 badges, so the accordion toggle speaks
      the same language as every other icon on the site */
   border-radius: 50%;
-  border: 1px solid rgba(39, 174, 96, .22);
-  background: rgba(39, 174, 96, .10);
+  border: 1px solid rgba(47, 128, 237, .22);
+  background: rgba(47, 128, 237, .10);
   color: var(--accent-ink);
   display: grid;
   place-items: center;
@@ -97,7 +97,7 @@
 }
 .desk-icon::before { content: "+"; color: currentColor; font-size: 1.3rem; line-height: 1; font-weight: 400; }
 .desk.is-open .desk-icon::before { content: "\2013"; }
-.desk:hover .desk-icon { background: rgba(39, 174, 96, .18); border-color: var(--accent); }
+.desk:hover .desk-icon { background: rgba(47, 128, 237, .18); border-color: var(--accent); }
 
 .desk-panel { padding: 0 clamp(1rem, 2.6vw, 1.6rem) clamp(1.2rem, 3vw, 1.7rem); }
 .desk-panel[hidden] { display: none; }
@@ -129,9 +129,9 @@
   flex: none;
   width: 20px; height: 20px;
   border-radius: 50%;
-  background-color: rgba(39, 174, 96, .12);
-  border: 1px solid rgba(39, 174, 96, .26);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231E8449' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
+  background-color: rgba(47, 128, 237, .12);
+  border: 1px solid rgba(47, 128, 237, .26);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231B5FBF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
   background-size: 12px 12px;
   background-position: center;
   background-repeat: no-repeat;
@@ -139,14 +139,61 @@
 .service-chip:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
-  background: rgba(255, 255, 255, .95);
-  box-shadow: 0 12px 28px rgba(39, 174, 96, .15), var(--shadow-in);
+  background: var(--surface-hover);
+  box-shadow: 0 12px 28px rgba(47, 128, 237, .15), var(--shadow-in);
 }
 
 .desks-footnote { margin-top: 1.5rem; color: var(--muted); }
 .panel-foot { margin-top: 1.15rem; font-size: .9rem; color: var(--muted); }
 .panel-foot a { color: var(--accent-ink-deep); border-bottom: 1px solid rgba(20, 92, 51, .38); transition: all .2s ease; }
 .panel-foot a:hover { color: var(--accent-ink-deeper); border-color: var(--accent-ink-deeper); }
+
+/* ---------- page-less extras ----------
+   Jobs the desk takes that carry no page of their own. Deliberately not
+   .service-chip: the chip count drives the filter total and the consistency
+   check, so counting these would promise a link that does not exist. */
+.extras-note {
+  padding: clamp(1.2rem, 2.6vw, 1.8rem);
+  border-radius: var(--radius-l);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-1), var(--shadow-in);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.extras-note h2 { font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem); }
+.extras-note > p { margin-top: .5rem; color: var(--muted); max-width: 62ch; }
+.extras-list {
+  display: grid;
+  gap: .55rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  margin-top: 1.15rem;
+}
+.extras-list li {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 52px;
+  padding: .8rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.extras-list li::before {
+  content: "";
+  flex: none;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-lite);
+  box-shadow: 0 0 0 4px rgba(47, 128, 237, .14);
+}
+.extras-list li.is-hidden,
+.extras-note.is-hidden { display: none; }
 
 /* ---------- services page filter ---------- */
 .filter-bar {
@@ -166,7 +213,7 @@
 .filter-bar .field { margin-bottom: 0; }
 .filter-count { font-size: .82rem; color: var(--faint); white-space: nowrap; }
 .desk.is-hidden, .service-chip.is-hidden { display: none; }
-.desk.is-match { border-color: var(--accent); background: rgba(39, 174, 96, .08); }
+.desk.is-match { border-color: var(--accent); background: rgba(47, 128, 237, .08); }
 
 /* ---------- desk cards (home grid) ---------- */
 .desk-cards { display: grid; gap: 1rem; }
@@ -189,7 +236,7 @@
 }
 a.desk-card:hover { 
   transform: translateY(-4px); 
-  box-shadow: 0 20px 50px rgba(39, 174, 96, .22), var(--shadow-in); 
+  box-shadow: 0 20px 50px rgba(47, 128, 237, .22), var(--shadow-in); 
   border-color: var(--accent);
 }
 .desk-card-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
@@ -207,7 +254,7 @@ a.desk-card:hover {
   text-transform: uppercase;
   /* was green text on an orange chip -- two themes fighting, ~2:1. Now one green. */
   color: var(--accent-ink-deep);
-  background: rgba(39, 174, 96, .14);
+  background: rgba(47, 128, 237, .14);
 }
 .desk-card h3 { color: var(--text); }
 .desk-card p { color: var(--muted); font-size: .93rem; }
@@ -246,7 +293,7 @@ a.desk-card:hover {
   top: -60px;
   width: 160px; height: 160px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(39, 174, 96, .18), transparent 70%);
+  background: radial-gradient(circle, rgba(47, 128, 237, .18), transparent 70%);
   pointer-events: none;
   filter: blur(30px);
 }
@@ -260,8 +307,8 @@ a.desk-card:hover {
   font-weight: 600;
   letter-spacing: .04em;
   color: var(--accent-ink-deep);
-  background: rgba(39, 174, 96, .12);
-  border: 1px solid rgba(39, 174, 96, .26);
+  background: rgba(47, 128, 237, .12);
+  border: 1px solid rgba(47, 128, 237, .26);
   margin-bottom: .5rem;
 }
 .step h3 { color: var(--text); }
@@ -319,9 +366,9 @@ a.desk-card:hover {
   transition: all .2s ease;
 }
 .review:hover {
-  border-color: rgba(39, 174, 96, .3);
-  background: rgba(255, 255, 255, .95);
-  box-shadow: 0 12px 32px rgba(39, 174, 96, .12), var(--shadow-in);
+  border-color: rgba(47, 128, 237, .3);
+  background: var(--surface-hover);
+  box-shadow: 0 12px 32px rgba(47, 128, 237, .12), var(--shadow-in);
 }
 .review-head { display: flex; align-items: center; gap: .75rem; }
 .review .avatar,
@@ -350,8 +397,8 @@ a.desk-card:hover {
 .review-empty {
   padding: 1.15rem 1.25rem;
   border-radius: var(--radius);
-  border: 1px solid rgba(39, 174, 96, .2);
-  background: rgba(255, 255, 255, .6);
+  border: 1px solid rgba(47, 128, 237, .2);
+  background: var(--surface-sunken);
 }
 .review-empty h3 { margin-bottom: .5rem; color: var(--text); }
 .review-empty p { color: var(--muted); font-size: .93rem; }
@@ -396,7 +443,7 @@ a.desk-card:hover {
   padding: 1.3rem;
   border-radius: var(--radius-l);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .52));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
 }
@@ -423,8 +470,8 @@ a.rail-line:hover { color: var(--accent-ink); }
   font-weight: 700;
   color: var(--accent-ink-deep);
   /* amber leftover from the old theme; now the same green tint as the 01 badges */
-  background: rgba(39, 174, 96, .12);
-  border: 1px solid rgba(39, 174, 96, .26);
+  background: rgba(47, 128, 237, .12);
+  border: 1px solid rgba(47, 128, 237, .26);
 }
 .rail-email { font-size: .87rem; }
 .rail-line em { font-style: normal; display: block; font-size: .78rem; color: var(--faint); }
@@ -445,7 +492,7 @@ a.rail-line:hover { color: var(--accent-ink); }
   padding: 1.25rem 1.3rem;
   border-radius: var(--radius-l);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .5));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
   transition: transform .18s ease, box-shadow .18s ease;
 }
@@ -455,13 +502,23 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
 .contact-card strong { font-family: var(--font-display); font-size: 1.1rem; color: var(--text); }
 .contact-card .small-strong { font-size: .95rem; font-weight: 600; line-height: 1.5; color: var(--text); overflow-wrap: anywhere; word-break: break-word; min-width: 0; }
 .contact-card-note { font-size: .78rem; color: var(--faint); }
+/* the Call card lists both desk lines, so each number is its own link.
+   Matches `strong` above so the card keeps the same rhythm as its siblings. */
+.contact-card-line {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text);
+  justify-content: start;
+  transition: color .18s ease;
+}
+.contact-card-line:hover { color: var(--accent-ink-deeper); }
 
 .map-frame {
   border-radius: var(--radius-l);
   overflow: hidden;
   border: 1px solid var(--glass-line);
   box-shadow: var(--shadow-2), var(--shadow-in);
-  background: #fff;
+  background: var(--solid);
 }
 .map-frame iframe { width: 100%; height: clamp(260px, 40vw, 440px); border: 0; }
 
@@ -474,7 +531,7 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
   padding: 1rem 1.15rem;
   border-radius: var(--radius-l);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .5));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
 }
 .person .avatar { width: 46px; height: 46px; font-size: .88rem; }
@@ -501,7 +558,7 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
   transition: all .2s ease;
 }
 .faq:hover {
-  border-color: rgba(39, 174, 96, .34);
+  border-color: rgba(47, 128, 237, .34);
 }
 .faq summary {
   list-style: none;
@@ -533,8 +590,8 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
 .faq p a:hover { color: var(--accent-ink-deeper); border-color: var(--accent-ink-deeper); }
 /* the open panel turns dark, so the answer text has to turn light too */
 .faq[open] p { color: #d4deea; }
-.faq[open] p a { color: #56e39a; border-bottom-color: rgba(86, 227, 154, .45); }
-.faq[open] p a:hover { color: #7ef0b5; border-color: #7ef0b5; }
+.faq[open] p a { color: #6FB6FF; border-bottom-color: rgba(111, 182, 255, .45); }
+.faq[open] p a:hover { color: #A9D4FF; border-color: #A9D4FF; }
 
 /* ---------- cta band ---------- */
 .cta-band {
@@ -544,7 +601,7 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
   border-radius: var(--radius-l);
   border: 1px solid var(--glass-border);
   background:
-    radial-gradient(120% 140% at 100% 0%, rgba(39, 174, 96, .16), transparent 60%),
+    radial-gradient(120% 140% at 100% 0%, rgba(47, 128, 237, .16), transparent 60%),
     var(--glass-bg);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
@@ -599,7 +656,7 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
 .related a::after { content: "→"; color: var(--accent-lite); }
 /* the card flips dark navy on hover, so the arrow has to go brighter green */
 .related a:hover::after,
-.related a:focus-visible::after { color: #56e39a; }
+.related a:focus-visible::after { color: #6FB6FF; }
 .related a:hover,
 .related a:focus-visible { 
   transform: translateX(4px); 
@@ -886,14 +943,22 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    column-gap: 2.5rem;
+  }
+
+  /* brand spans the first row so the two link columns sit side by side */
+  .footer-brand {
+    grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1024px) {
   .footer-grid {
-    grid-template-columns: 1.3fr .8fr max-content;
-    gap: 2rem;
+    grid-template-columns: 1.4fr .95fr 1.15fr;
+    gap: 2.5rem 2rem;
+    align-items: start;
   }
 }
 
@@ -1089,4 +1154,19 @@ a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2),
   .section-head h2 { font-size: 1.4rem; }
   .hero-pill { flex-direction: row; text-align: start; }
 }
+
+/* ==========================================================================
+   DARK THEME — the handful of components whose light look is a bespoke tint
+   rather than a surface token. Attribute-scoped, never a colour-scheme query.
+   ========================================================================== */
+[data-theme="dark"] .form-success {
+  background: linear-gradient(150deg, rgba(39, 174, 96, .16), rgba(255, 255, 255, .03));
+  border-color: rgba(39, 174, 96, .4);
+}
+/* empty stars and the unfilled half of a rating were a 28% navy that vanishes
+   on a dark card — lift them to a soft light so a 3/5 still reads as 3/5 */
+[data-theme="dark"] .star,
+[data-theme="dark"] .review .rating .off { color: rgba(255, 255, 255, .32); }
+/* closed-FAQ answer link kept a green underline leftover from the old theme */
+[data-theme="dark"] .faq p a { border-bottom-color: rgba(156, 203, 255, .4); }
 

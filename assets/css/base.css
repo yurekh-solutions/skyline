@@ -23,18 +23,23 @@
   --blur: saturate(130%) blur(16px);
   --glass-bg: rgba(255, 255, 255, .75);
   --glass-border: rgba(16, 34, 63, .10);
+  /* Read by the nav drawer, .feature-item and the admin panel. They were declared
+     ONLY inside the dark-mode block and the dead modern-base.css, so in light mode
+     every `1px solid var(--border-*)` fell back to currentColor and drew hard rules. */
+  --border-color: rgba(16, 34, 63, .12);
+  --border-light: rgba(16, 34, 63, .07);
 
-  /* Green brand colors - Money, Trust, Growth */
-  --accent: #27AE60;
-  --accent-lite: #2ECC71;
-  --accent-glow: #52D687;
-  --accent-ink: #1E8449;
-  /* AA-safe green for small text and links sitting on light surfaces */
-  --accent-ink-deep: #145C33;
+  /* Blue brand colors - Trust, Clarity, Growth */
+  --accent: #6391cd;
+  --accent-lite: #56A8F5;
+  --accent-glow: #7CC0FF;
+  --accent-ink: #1B5FBF;
+  /* AA-safe blue for small text and links sitting on light surfaces */
+  --accent-ink-deep: #0F3D7A;
   /* hover/active step below --accent-ink-deep, same hue, ~10:1 on white */
-  --accent-ink-deeper: #0E4A26;
-  /* full-fill green buttons site-wide now match the admin tab button look */
-  --accent-gradient: linear-gradient(135deg, #2ECC71 0%, #1E8449 100%);
+  --accent-ink-deeper: #0A2C5A;
+  /* full-fill blue buttons site-wide now match the admin tab button look */
+  --accent-gradient: linear-gradient(135deg, #3E8EF7 0%, #1B5FBF 100%);
   /* WhatsApp brand green. The old --orange-gradient was never defined here,
      which left the mobile sticky button with no fill at all. */
   --wa-gradient: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
@@ -56,7 +61,7 @@
   /* Light shadows */
   --shadow-1: 0 14px 34px -20px rgba(16, 34, 63, .20);
   --shadow-2: 0 34px 70px -34px rgba(16, 34, 63, .28);
-  --shadow-glow: 0 8px 32px rgba(39, 174, 96, .20);
+  --shadow-glow: 0 8px 32px rgba(47, 128, 237, .20);
   --shadow-in: inset 0 1px 0 rgba(255, 255, 255, .90);
 
   --radius-s: 12px;
@@ -73,6 +78,83 @@
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --header-h: 72px;
   --header-pad: clamp(.75rem, 1.5vw, 1.25rem);
+
+  /* ---------- surface roles (added so a dark theme can flip every panel) ----------
+     Light values are the exact literals the rules used to hard-code, so light
+     mode is pixel-identical. [data-theme="dark"] below re-maps ONLY these, and
+     because no rule paints a panel without a token, dark can never wash out. */
+  --page-grad: linear-gradient(180deg, #fff, #f8faf9);
+  --glass-surface: linear-gradient(150deg, rgba(255, 255, 255, .80), rgba(255, 255, 255, .52));
+  --card-surface: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .52));
+  --surface-hover: rgba(255, 255, 255, .95);
+  --surface-raised: rgba(255, 255, 255, .96);
+  --surface-input: rgba(255, 255, 255, .90);
+  --surface-bar: rgba(255, 255, 255, .82);
+  --surface-sunken: rgba(255, 255, 255, .78);
+  --hairline-strong: rgba(255, 255, 255, .60);
+  --section-soft: linear-gradient(180deg, rgba(248, 246, 243, .80), rgba(255, 255, 255, .40));
+}
+
+/* ==========================================================================
+   DARK THEME — attribute-scoped, opt-in via the header toggle.
+   This is NOT a @media (prefers-color-scheme) block: the OS never flips the
+   palette on its own (that auto-dark washout is what the empty prefers-color-
+   scheme block at the foot of this file guards against). A visitor chooses dark
+   and it persists. Every value the light :root declares that represents a
+   SURFACE, TEXT, EDGE or SHADOW role is re-mapped here — the rules above read
+   those roles only through var(), so no panel can be left white-on-white.
+   Hero, page-banner, the navy footer and the open-FAQ card are fixed dark
+   artwork, so their literal white text/overlays are intentionally untouched.
+   ========================================================================== */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* page + surfaces */
+  --bg: #0A1520;
+  --bg-deep: #0E1B2A;
+  --surface: rgba(22, 34, 50, .72);
+  --surface-2: rgba(28, 42, 60, .92);
+  --surface-3: rgba(16, 27, 41, .85);
+  --solid: #14243A;
+
+  --glass-bg: rgba(20, 32, 48, .68);
+  --glass-border: rgba(255, 255, 255, .10);
+  --edge: rgba(255, 255, 255, .10);
+  --edge-soft: rgba(255, 255, 255, .06);
+  --glass-line: rgba(255, 255, 255, .12);
+  --border-color: rgba(255, 255, 255, .14);
+  --border-light: rgba(255, 255, 255, .08);
+
+  /* text — the dark-navy-on-white scale flips to light-on-dark */
+  --text: #EAF1F8;
+  --muted: #A9B8CC;
+  --faint: #8698AE;
+  --navy: #EAF1F8;
+
+  /* accents — brightened so links and labels stay AA on dark surfaces */
+  --accent: #4D9BF5;
+  --accent-lite: #7CC0FF;
+  --accent-ink: #A9D4FF;
+  --accent-ink-deep: #9CCBFF;
+  --accent-ink-deeper: #C4E0FF;
+
+  /* surface roles */
+  --page-grad: linear-gradient(180deg, #0A1520, #0E1B2A);
+  --glass-surface: linear-gradient(150deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+  --card-surface: linear-gradient(155deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+  --surface-hover: rgba(36, 52, 74, .95);
+  --surface-raised: rgba(26, 40, 60, .96);
+  --surface-input: rgba(16, 26, 40, .90);
+  --surface-bar: rgba(16, 26, 40, .82);
+  --surface-sunken: rgba(12, 22, 34, .78);
+  --hairline-strong: rgba(255, 255, 255, .14);
+  --section-soft: linear-gradient(180deg, rgba(255, 255, 255, .035), rgba(255, 255, 255, 0));
+
+  /* shadows + inset highlight — a 90% white top sheen would read as a glare line */
+  --shadow-1: 0 14px 34px -20px rgba(0, 0, 0, .60);
+  --shadow-2: 0 34px 70px -34px rgba(0, 0, 0, .70);
+  --shadow-glow: 0 8px 32px rgba(47, 128, 237, .28);
+  --shadow-in: inset 0 1px 0 rgba(255, 255, 255, .06);
 }
 
 /* ---------- reset ---------- */
@@ -93,7 +175,7 @@ body {
   line-height: 1.7;
   color: var(--text);
   background-color: var(--bg);
-  background-image: linear-gradient(180deg, #fff, #f8faf9);
+  background-image: var(--page-grad);
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -115,7 +197,7 @@ address { font-style: normal; }
   border-radius: 8px;
 }
 
-::selection { background: rgba(39, 174, 96, .26); }
+::selection { background: rgba(47, 128, 237, .26); }
 
 /* ---------- utilities ---------- */
 .wrap {
@@ -162,7 +244,7 @@ address { font-style: normal; }
 /* glass surface recipe, reused everywhere */
 .glass,
 .panel {
-  background: linear-gradient(150deg, rgba(255, 255, 255, .80), rgba(255, 255, 255, .52));
+  background: var(--glass-surface);
   border: 1px solid var(--glass-line);
   border-radius: var(--radius-l);
   box-shadow: var(--shadow-1), var(--shadow-in);
@@ -183,7 +265,7 @@ address { font-style: normal; }
 .eyebrow .dot {
   width: 8px; height: 8px; border-radius: 50%;
   background: var(--accent-lite);
-  box-shadow: 0 0 0 4px rgba(39, 174, 96, .16);
+  box-shadow: 0 0 0 4px rgba(47, 128, 237, .16);
 }
 
 /* ---------- typography ---------- */
@@ -231,7 +313,7 @@ p { color: var(--muted); font-weight: 400; }
 }
 .btn-primary:hover { 
   transform: translateY(-2px); 
-  box-shadow: 0 12px 40px rgba(39, 174, 96, .35), var(--shadow-in); 
+  box-shadow: 0 12px 40px rgba(47, 128, 237, .35), var(--shadow-in);
 }
 .btn-primary svg {
   display: inline-block;
@@ -249,7 +331,7 @@ p { color: var(--muted); font-weight: 400; }
   border-color: var(--accent); 
   color: var(--accent); 
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(39, 174, 96, .15);
+  box-shadow: 0 8px 24px rgba(47, 128, 237, .15);
 }
 
 .btn-wa {
@@ -280,7 +362,7 @@ p { color: var(--muted); font-weight: 400; }
 .text-link {
   color: var(--accent-ink-deep);
   font-weight: 500;
-  border-bottom: 1px solid rgba(30, 132, 73, .38);
+  border-bottom: 1px solid rgba(27, 95, 191, .38);
   transition: all .2s ease;
 }
 /* hover used to go LIGHTER -- --accent is only 2.9:1 on white, so the link
@@ -321,13 +403,13 @@ select {
   background-size: 6px 6px;
   background-repeat: no-repeat;
 }
-option, optgroup { background: #fff; color: var(--text); }
+option, optgroup { background: var(--solid); color: var(--text); }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent);
   /* was an orange glow left over from the old amber theme -- clashed with the green brand */
-  box-shadow: 0 0 0 4px rgba(39, 174, 96, .30);
+  box-shadow: 0 0 0 4px rgba(47, 128, 237, .30);
 }
 input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 .is-invalid { border-color: var(--warn) !important; box-shadow: 0 0 0 4px rgba(194, 72, 58, .16) !important; }
@@ -342,8 +424,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   padding-top: var(--header-pad);
   padding-inline: clamp(.9rem, 3vw, 2rem);
 }
-.site-header.is-scrolled .header-inner {
-  background: rgba(255, 255, 255, .96);
+.site-header.is-scrolled .header-inner::before {
+  background: var(--surface-raised);
   box-shadow: 0 16px 40px -16px rgba(16, 34, 63, .34);
 }
 
@@ -356,8 +438,23 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   min-height: 72px;
   padding: .5rem 1.1rem .5rem 1.4rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, .82);
-  border: 1px solid rgba(255, 255, 255, .6);
+  /* The glass fill lives on ::before, not on this box.
+     `backdrop-filter` makes an element the containing block for every
+     position:fixed descendant — with it here, the mobile side drawer inside
+     .nav-list sized itself against the 72px pill instead of the viewport and
+     rendered as a 225px stub pinned to the header. A pseudo-element carries the
+     identical blur without stealing the drawer's containing block. */
+  position: relative;
+  z-index: 0;
+}
+.header-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--surface-bar);
+  border: 1px solid var(--hairline-strong);
   box-shadow: 0 14px 40px rgba(4, 20, 40, .14);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
@@ -409,8 +506,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 .nav-list a.is-active {
   /* mock shows a clean white pill with green label, not a green tint */
   color: var(--accent);
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(16, 34, 63, .10), inset 0 1px 0 rgba(255, 255, 255, .9);
+  background: var(--solid);
+  box-shadow: 0 2px 10px rgba(16, 34, 63, .10), var(--shadow-in);
   border-radius: 999px;
   font-weight: 600;
 }
@@ -445,36 +542,108 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 
 .nav-cta { display: none; }
 
+/* ---------- theme toggle (injected into .main-nav by site.js) ----------
+   A compact pill that mirrors the hamburger's glass recipe. It reads the
+   current theme off <html data-theme> and swaps a moon/sun glyph — the two
+   icons live in the button markup and only one is shown at a time. */
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 46px; height: 46px;
+  flex: none;
+  border-radius: 13px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text);
+  box-shadow: var(--shadow-1), var(--shadow-in);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  transition: transform .16s ease, color .2s ease, background-color .2s ease, border-color .2s ease;
+}
+.theme-toggle:hover { transform: translateY(-1px); color: var(--accent); border-color: var(--accent); }
+.theme-toggle svg { width: 20px; height: 20px; display: block; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ---------- mobile side drawer ----------
+   Slides in from the right — the side the hamburger lives on — instead of dropping
+   a full-width panel over the page. Layer order is deliberate:
+     116 backdrop · 118 drawer · 120 header pill (holds the X that closes it) · 122 sticky Call/WhatsApp
+   so the two primary actions stay reachable while the menu is open, and the drawer's
+   bottom padding keeps its last link clear of the sticky bar. */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 116;
+  background: rgba(4, 14, 30, .55);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .3s ease, visibility 0s linear .3s;
+}
+.nav-backdrop.is-on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .3s ease, visibility 0s;
+}
+
 @media (max-width: 949px) {
-  .main-nav.nav-open .nav-list {
+  .main-nav .nav-list {
     display: grid;
     position: fixed;
-    inset: var(--header-h) 0 auto 0;
+    inset: 0 0 0 auto;
+    width: min(84vw, 340px);
+    max-width: calc(100vw - 56px);
+    align-content: start;
     gap: 0;
-    padding: .75rem var(--gutter) 1.5rem;
-    background: rgba(3, 27, 61, .95);
+    /* start below the floating header pill, end above the sticky Call/WhatsApp bar */
+    padding: calc(var(--header-h) + var(--header-pad) + 2.2rem) 1.15rem
+             calc(6.5rem + env(safe-area-inset-bottom));
+    background: rgba(6, 24, 46, .97);
     backdrop-filter: var(--blur);
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-2);
+    -webkit-backdrop-filter: var(--blur);
+    border-left: 1px solid rgba(255, 255, 255, .10);
+    box-shadow: -26px 0 60px -26px rgba(3, 16, 34, .75);
     z-index: 118;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* a flick inside the drawer must not scroll the page behind it */
+    overscroll-behavior: contain;
+    transform: translateX(102%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .3s cubic-bezier(.22, .61, .36, 1), visibility 0s linear .3s;
+  }
+  .main-nav.nav-open .nav-list {
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform .3s cubic-bezier(.22, .61, .36, 1), visibility 0s;
   }
   /* the drawer is dark navy, so it needs the dark-surface palette —
      --muted / --navy / --accent-ink all read as dark-on-dark here */
-  .main-nav.nav-open .nav-list li { border-top: 1px solid rgba(255, 255, 255, .12); }
-  .main-nav.nav-open .nav-list li:first-child { border-top: 0; }
-  .main-nav.nav-open .nav-list a {
+  .main-nav .nav-list li { border-top: 1px solid rgba(255, 255, 255, .10); }
+  .main-nav .nav-list li:first-child { border-top: 0; }
+  .main-nav .nav-list a {
     display: block;
-    padding: .95rem .35rem;
+    padding: 1.05rem .35rem;
     font-size: 1.02rem;
     border-radius: 0;
     background: none;
     color: #e6eef7;
   }
-  .main-nav.nav-open .nav-list a:hover,
-  .main-nav.nav-open .nav-list a:focus-visible { color: #56e39a; background: none; }
-  .main-nav.nav-open .nav-list a.is-active {
-    color: #56e39a;
+  .main-nav .nav-list a:hover,
+  .main-nav .nav-list a:focus-visible { color: #6FB6FF; background: none; }
+  .main-nav .nav-list a.is-active {
+    /* the desktop white pill would read as a stripe across the dark panel */
+    color: #6FB6FF;
     background: none;
+    box-shadow: none;
+    border-radius: 0;
     font-weight: 600;
   }
 }
@@ -486,6 +655,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   .nav-list { display: flex; }
   .nav-toggle { display: none; }
   .nav-cta { display: inline-flex; }
+  .nav-backdrop { display: none; }
 }
 
 /* ---------- page shell: sub-page header band ---------- */
@@ -501,7 +671,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   width: min(520px, 60vw);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(39, 174, 96, .22), transparent 68%);
+  background: radial-gradient(circle, rgba(47, 128, 237, .22), transparent 68%);
   filter: blur(60px);
   z-index: -1;
 }
@@ -536,8 +706,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   height: 46px;
   border-radius: 50%;
   color: var(--accent-ink);
-  background: rgba(39, 174, 96, .10);
-  border: 1px solid rgba(39, 174, 96, .22);
+  background: rgba(47, 128, 237, .10);
+  border: 1px solid rgba(47, 128, 237, .22);
 }
 .icon-chip svg { width: 22px; height: 22px; display: block; }
 .icon-chip--sm { width: 38px; height: 38px; border-radius: 50%; }
@@ -546,9 +716,9 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 .icon-chip--lg svg { width: 27px; height: 27px; }
 /* dark navy surfaces need a lighter tint and a brighter glyph */
 .icon-chip--on-dark {
-  color: #56e39a;
-  background: rgba(55, 217, 138, .16);
-  border-color: rgba(55, 217, 138, .32);
+  color: #6FB6FF;
+  background: rgba(91, 180, 255, .16);
+  border-color: rgba(91, 180, 255, .32);
 }
 
 /* ---------- hero (home only) ---------- */
@@ -626,7 +796,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   color: rgba(255, 255, 255, .94);
   margin-bottom: 1.5rem;
 }
-.hero-copy .eyebrow svg { color: #37d98a; }
+.hero-copy .eyebrow svg { color: #5BB4FF; }
 
 .hero-copy h1 {
   font-size: clamp(2rem, 1rem + 3.6vw, 4.2rem);
@@ -637,7 +807,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   color: #fff;
   margin-bottom: 1.15rem;
 }
-.hero-copy h1 .accent { color: #37d98a; }
+.hero-copy h1 .accent { color: #5BB4FF; }
 
 .hero-copy .lead {
   font-size: clamp(.9rem, .8rem + .3vw, 1rem);
@@ -652,6 +822,21 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   flex-wrap: wrap;
   gap: 1.15rem;
   align-items: center;
+}
+
+/* the visiting-card line, carried under the lead as a quiet sign-off.
+   It sits on the navy scrim, so it takes the same white as the lead rather
+   than a brand green — --accent-ink-deep would vanish against the photo. */
+.hero-motto {
+  font-family: var(--font-display);
+  font-size: .9rem;
+  font-style: italic;
+  letter-spacing: .01em;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .82);
+  margin: 0 0 1.4rem;
+  padding-inline-start: .9rem;
+  border-inline-start: 2px solid rgba(91, 180, 255, .55);
 }
 /* the mock's hero pills are much taller than the site default button */
 .hero-actions .btn { min-height: 52px; padding-inline: 1.4rem; font-size: .9rem; }
@@ -681,14 +866,14 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   font-weight: 600;
   font-size: 1rem;
   color: var(--navy);
-  background: rgba(255, 255, 255, .82);
-  border: 1px solid rgba(255, 255, 255, .6);
+  background: var(--surface-bar);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--shadow-1);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   transition: transform .16s ease, background-color .16s ease;
 }
-.btn-story:hover { background: #fff; transform: translateY(-2px); }
+.btn-story:hover { background: var(--solid); transform: translateY(-2px); }
 
 /* floating stat cards */
 .hero-float { display: flex; flex-direction: column; gap: .8rem; }
@@ -713,8 +898,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   width: 46px; height: 46px;
   color: var(--accent-ink);
   border-radius: 50%;
-  background: rgba(39, 174, 96, .10);
-  border: 1px solid rgba(39, 174, 96, .18);
+  background: rgba(47, 128, 237, .10);
+  border: 1px solid rgba(47, 128, 237, .18);
 }
 .hero-pill .icon-chip svg { width: 26px; height: 26px; }
 .hero-pill > div { flex: 1; min-width: 0; }
@@ -852,7 +1037,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   color: var(--text);
 }
 /* separator between service names — a plain dot, no sparkle glyph */
-.ticker-row i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: rgba(39, 174, 96, .45); }
+.ticker-row i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: rgba(47, 128, 237, .45); }
 
 @keyframes ticker-scroll {
   from { transform: translate3d(0, 0, 0); }
@@ -883,8 +1068,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   overflow-y: auto;
   padding: clamp(1.3rem, 3vw, 2.1rem);
   border-radius: var(--radius-l);
-  background: linear-gradient(160deg, rgba(255, 255, 255, .96), rgba(247, 250, 254, .9));
-  border: 1px solid rgba(255, 255, 255, .9);
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--shadow-2);
   overscroll-behavior: contain;
   animation: pop-in .22s ease both;
@@ -898,11 +1083,11 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   width: 40px; height: 40px;
   border-radius: 50%;
   border: 1px solid var(--edge);
-  background: rgba(255, 255, 255, .9);
+  background: var(--surface-input);
   color: var(--muted);
   z-index: 2;
 }
-.modal-x:hover { color: var(--accent-ink); border-color: rgba(39, 174, 96, .45); }
+.modal-x:hover { color: var(--accent-ink); border-color: rgba(47, 128, 237, .45); }
 .modal-desk { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: .5rem; }
 .modal-blurb { color: var(--muted); margin-top: .6rem; }
 .modal-sub { margin-top: 1.5rem; color: var(--navy); }
@@ -917,10 +1102,10 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   align-items: start;
   padding: .65rem .85rem;
   border-radius: var(--radius-s);
-  background: rgba(255, 255, 255, .78);
+  background: var(--surface-sunken);
   border: 1px solid var(--edge-soft);
   font-size: .93rem;
-  color: #22364d;
+  color: var(--text);
   box-shadow: 0 6px 16px -14px rgba(16, 34, 63, .5);
 }
 .doc-list li::before {
@@ -930,8 +1115,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(39, 174, 96, .12);
-  border: 1px solid rgba(39, 174, 96, .2);
+  background: rgba(47, 128, 237, .12);
+  border: 1px solid rgba(47, 128, 237, .2);
   color: var(--accent-ink);
   font-size: .8rem;
   font-weight: 600;
@@ -950,7 +1135,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   grid-template-columns: 1fr 1.4fr;
   gap: .55rem;
   padding: .6rem var(--gutter) calc(.6rem + env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, .82);
+  background: var(--surface-bar);
   backdrop-filter: var(--blur);
   border-top: 1px solid var(--glass-line);
   box-shadow: 0 -14px 34px -26px rgba(16, 34, 63, .6);
@@ -964,7 +1149,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   font-weight: 600;
   font-size: .92rem;
 }
-.sticky-call { border: 1px solid var(--glass-line); color: var(--navy); background: rgba(255, 255, 255, .85); box-shadow: var(--shadow-in); }
+.sticky-call { border: 1px solid var(--glass-line); color: var(--navy); background: var(--surface-bar); box-shadow: var(--shadow-in); }
 .sticky-wa { 
   background: var(--wa-gradient); 
   color: #fff; 
@@ -972,7 +1157,12 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 }
 
 @media (min-width: 950px) { .sticky-cta { display: none; } }
-@media (max-width: 949px) { body { padding-bottom: 78px; } }
+@media (max-width: 949px) {
+  body { padding-bottom: 78px; }
+  /* stays above the side drawer so a call or WhatsApp is one tap away
+     even with the menu open — the drawer pads its own bottom for this */
+  .sticky-cta { z-index: 122; }
+}
 
 /* ---------- footer ---------- */
 .site-footer {
@@ -1000,7 +1190,7 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   color: #cdd8e6;
   transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s ease;
 }
-.footer-social a:hover { color: #fff; border-color: var(--accent); background: rgba(39, 174, 96, .18); transform: translateY(-2px); }
+.footer-social a:hover { color: #fff; border-color: var(--accent); background: rgba(47, 128, 237, .18); transform: translateY(-2px); }
 .footer-social svg { width: 18px; height: 18px; }
 
 .footer-nav h4, .footer-contact h4 {
@@ -1011,8 +1201,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   color: var(--accent-lite);
   margin-bottom: 1.2rem;
 }
-.footer-nav ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 1.4rem; }
-.footer-nav a { color: #cdd8e6; font-size: .94rem; transition: color .2s ease; }
+.footer-nav ul { display: grid; grid-template-columns: repeat(2, max-content); gap: .7rem 1.4rem; }
+.footer-nav a { color: #cdd8e6; font-size: .94rem; white-space: nowrap; transition: color .2s ease; }
 .footer-nav a:hover { color: #fff; }
 
 .footer-contact { display: grid; gap: .7rem; position: relative; align-content: start; }
@@ -1021,6 +1211,27 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 .footer-contact a svg { width: 16px; height: 16px; color: var(--accent-lite); flex: none; }
 .footer-contact a[href^="mailto:"] { white-space: nowrap; font-size: .9rem; }
 .footer-contact p { color: #a9b8cc; font-size: .88rem; margin-top: .4rem; line-height: 1.6; }
+
+/* Two lines carried over from the visiting card. Selectors are written as
+   `.footer-brand .footer-motto` / `.footer-contact .footer-centres` because the
+   plain element rules above already score two classes — a bare `.footer-motto`
+   would lose and inherit the paragraph sizing. */
+.footer-brand .footer-motto {
+  color: var(--accent-glow);
+  font-family: var(--font-display);
+  font-size: .9rem;
+  font-style: italic;
+  letter-spacing: .01em;
+  line-height: 1.5;
+  margin-top: .8rem;
+  max-width: none;
+}
+.footer-contact .footer-centres {
+  color: #9db0c8;
+  font-size: .82rem;
+  line-height: 1.6;
+  margin-top: .1rem;
+}
 
 .footer-base {
   display: flex;
@@ -1036,8 +1247,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 }
 .footer-base p { color: #9fb0c6; }
 .footer-credit { color: #9fb0c6; }
-.footer-credit a { color: var(--accent-lite); font-weight: 600; border-bottom: 1px solid rgba(46, 204, 113, .4); }
-.footer-credit a:hover { color: #56e39a; border-color: #56e39a; }
+.footer-credit a { color: var(--accent-lite); font-weight: 600; border-bottom: 1px solid rgba(86, 168, 245, .4); }
+.footer-credit a:hover { color: #6FB6FF; border-color: #6FB6FF; }
 
 .admin-link {
   color: #dbe4f0;
@@ -1047,14 +1258,14 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   background: rgba(255, 255, 255, .04);
   transition: all .2s ease;
 }
-.admin-link:hover { color: #fff; border-color: var(--accent); background: rgba(39, 174, 96, .2); }
+.admin-link:hover { color: #fff; border-color: var(--accent); background: rgba(47, 128, 237, .2); }
 
 .noscript-bar {
   margin: 1rem auto;
   padding: 1.2rem;
   border-radius: var(--radius);
   border: 1px solid var(--accent);
-  background: rgba(39, 174, 96, .12);
+  background: rgba(47, 128, 237, .12);
   color: var(--accent-ink-deep);
 }
 
@@ -1193,54 +1404,11 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   }
 }
 
-/* Mobile Navigation Responsive */
-@media (max-width: 949px) {
-  .nav-list {
-    position: fixed;
-    top: var(--header-h);
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, .95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all .3s ease;
-  }
-  
-  .nav-open .nav-list {
-    max-height: calc(100vh - var(--header-h));
-    opacity: 1;
-    overflow-y: auto;
-  }
-  
-  .nav-list {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .nav-list li {
-    border-bottom: 1px solid var(--border-light);
-  }
-  
-  .nav-list li:last-child {
-    border-bottom: none;
-  }
-  
-  .nav-list a {
-    display: block;
-    padding: 1rem;
-    text-align: left;
-  }
-  
-  .nav-cta {
-    width: 100%;
-    margin-top: 1rem;
-  }
-}
+/* Mobile navigation is defined once, in the drawer block above (`.main-nav.nav-open
+   .nav-list`): dark navy surface, light links, hairline separators drawn with
+   rgba(255,255,255,.12). The duplicated block that used to sit here restyled the same
+   drawer as a white panel with `var(--border-color)` separators, so both rule sets
+   applied at once — two borders per item and a surface colour that never won. */
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
@@ -1333,36 +1501,16 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   }
 }
 
-/* Dark Mode Support (Optional) */
+/* ---------- colour scheme: light, locked ----------
+   Skyline ships a light glass theme only. The previous @media (prefers-color-scheme: dark)
+   override re-mapped just the text tokens (--text/--muted/--faint) and .glass/.panel, while
+   every card surface kept --glass-bg: rgba(255,255,255,.75). On a phone set to dark mode
+   (and WhatsApp's in-app browser follows the OS setting) that produced near-white cards
+   carrying near-white text — the washed-out grey screens reported on mobile.
+   Removing the override makes every device render the one intended theme; `color-scheme: light`
+   on :root additionally opts the page out of Chrome/Android Auto-Dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1f2e;
-    --bg-deep: #141824;
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --faint: #6b7280;
-    --surface: rgba(30, 35, 50, .8);
-    --glass-line: rgba(255, 255, 255, .1);
-    --border-color: rgba(255, 255, 255, .1);
-    --border-light: rgba(255, 255, 255, .05);
-  }
-  
-  body {
-    background-image: 
-      radial-gradient(circle at 10% 20%, rgba(39, 174, 96, .12), transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(39, 174, 96, .08), transparent 40%),
-      linear-gradient(180deg, #1a1f2e 0%, #141824 100%);
-  }
-  
-  h1, h2, h3, h4 {
-    color: #f9fafb;
-  }
-  
-  .glass,
-  .panel {
-    background: linear-gradient(150deg, rgba(30, 35, 50, .85), rgba(30, 35, 50, .65));
-    border-color: rgba(255, 255, 255, .1);
-  }
+  /* Deliberately empty: the light palette above is the design at every OS setting. */
 }
 
 /* Landscape Orientation */
@@ -1445,8 +1593,8 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
 }
 .page-banner h1 { max-width: 28ch; color: #fff; }
 .page-banner .lead { max-width: 65ch; font-size: .95rem; color: #e3ebf1; margin-bottom: 1.1rem; }
-.page-banner .accent { color: #70e8a3; }
-.page-banner .eyebrow { color: #99e8bc; margin-top: .75rem; }
+.page-banner .accent { color: #7FC4FF; }
+.page-banner .eyebrow { color: #A9D4FF; margin-top: .75rem; }
 .page-banner .breadcrumbs, .page-banner .breadcrumbs a, .page-banner .breadcrumbs span[aria-current], .page-banner .breadcrumbs li::before { color: #e3ebf1; }
 .page-banner .btn-ghost { background: rgba(255, 255, 255, .12); color: #fff; border-color: rgba(255, 255, 255, .4); }
 .page-banner .btn-wa { background: rgba(255, 255, 255, .08); color: #fff; border-color: rgba(255, 255, 255, .4); box-shadow: none; }
@@ -1458,7 +1606,6 @@ input::placeholder, textarea::placeholder { color: rgba(116, 134, 155, .8); }
   .main-nav { gap: .5rem; }
 }
 @media (max-width: 949px) {
-  .main-nav.nav-open .nav-list { inset: calc(100% + .5rem) 0 auto 0; border-radius: 20px; max-height: calc(100svh - var(--header-h) - 3rem); }
   .main-nav.nav-open .nav-list a.is-active { box-shadow: none; }
 }
 @media (max-width: 480px) {

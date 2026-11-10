@@ -1,8 +1,9 @@
 /* ==========================================================================
    check-consistency.js — multi-page audit
    Compares every page against assets/js/data.js, then checks structure:
-   chips vs catalogue, select options, generated pages, tag balance,
-   single h1, canonical, anchors, aria-controls and relative asset paths.
+   chips vs catalogue, select options (including the page-less extras),
+   generated pages, tag balance, single h1, canonical, anchors, aria-controls
+   and relative asset paths.
 
    Run:  node assets/tools/check-consistency.js
    ========================================================================== */
@@ -61,15 +62,20 @@ const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 }
 
 /* ---------- 2. select options on enquire + reviews ---------- */
-['enquire.html', 'reviews.html'].forEach((file) => {
-  console.log('\n' + file + ' — service options');
-  const html = read(file);
-  const options = [...html.matchAll(/<option>([^<]+)<\/option>/g)].map((m) => unesc(m[1]));
-  ok('options found: ' + options.length);
-  const known = new Set(NAMES.concat(['Something else / not sure']));
-  options.forEach((o) => { if (!known.has(o)) fail('option without a catalogue entry: ' + o); });
-  NAMES.forEach((n) => { if (!options.includes(n)) fail('catalogue service not selectable: ' + n); });
-});
+{
+  /* `extras` are offered at the desk but carry no page, so they are allowed in
+     the dropdowns without being in the page-building `services` map. */
+  const SELECTABLE = NAMES.concat(DATA.extras.map((e) => e.name));
+  ['enquire.html', 'reviews.html'].forEach((file) => {
+    console.log('\n' + file + ' — service options');
+    const html = read(file);
+    const options = [...html.matchAll(/<option>([^<]+)<\/option>/g)].map((m) => unesc(m[1]));
+    ok('options found: ' + options.length);
+    const known = new Set(SELECTABLE.concat(['Something else / not sure']));
+    options.forEach((o) => { if (!known.has(o)) fail('option with no catalogue or extras entry: ' + o); });
+    SELECTABLE.forEach((n) => { if (!options.includes(n)) fail('service not selectable: ' + n); });
+  });
+}
 
 /* ---------- 3. generated pages ---------- */
 console.log('\nservices/ folder');
@@ -90,7 +96,9 @@ rootPages.concat(subPages).forEach((rel) => {
   if (!admin(rel) && !html.includes('<link rel="canonical"')) local.push('no canonical');
   if (!html.includes('<title>') || html.length < 200) local.push('thin page');
 
-  ['section', 'form', 'article', 'details', 'table', 'ul', 'ol', 'li', 'div', 'aside', 'nav'].forEach((tag) => {
+  /* `a` and `span` are in here because a card swapped from <a> to <div> can
+     leave its closing tag behind, and browsers recover that silently. */
+  ['section', 'form', 'article', 'details', 'table', 'ul', 'ol', 'li', 'div', 'aside', 'nav', 'a', 'span', 'button', 'strong'].forEach((tag) => {
     const open = (html.match(new RegExp('<' + tag + '(\\s|>)', 'g')) || []).length;
     const close = (html.match(new RegExp('</' + tag + '>', 'g')) || []).length;
     if (open !== close) local.push('unbalanced <' + tag + '> open ' + open + ' close ' + close);
@@ -117,6 +125,34 @@ rootPages.concat(subPages).forEach((rel) => {
 });
 
 function admin(rel) { return /admin\.html$/.test(rel); }
+
+/* ---------- 4b. visiting-card parity ---------- */
+/* Every public page carries the same footer. This is the guard that catches a
+   propagation step silently matching nothing — the root pages mix CRLF and LF,
+   so a build step written against one ending quietly skips the other. */
+console.log('\nvisiting-card details on every public page');
+{
+  const CARD = [
+    ['primary phone', 'tel:+918271895469'],
+    ['second phone', 'tel:+918369942408'],
+    ['email', 'mailto:skylinesolutionenterprises@outlook.com'],
+    ['motto', 'A Friend In Need Is A Friend Indeed'],
+    ['centres', 'CSC Digital Seva Kendra'],
+    ['address', 'Santacruz East']
+  ];
+  const publicPages = fs.readdirSync(ROOT)
+    /* admin has no footer by design; the placeholder generator is a dev utility */
+    .filter((f) => /\.html$/.test(f) && !['admin.html', 'generate-placeholder-images.html'].includes(f))
+    .concat(subPages.map((p) => p.replace(/\\/g, '/')));
+  let clean = 0;
+  publicPages.forEach((rel) => {
+    const html = read(rel);
+    const missing = CARD.filter((c) => !html.includes(c[1])).map((c) => c[0]);
+    if (missing.length) fail(rel + ' footer is missing: ' + missing.join(', '));
+    else clean++;
+  });
+  ok('public pages with the full card footer: ' + clean + ' / ' + publicPages.length);
+}
 
 /* ---------- 5. sitemap coverage ---------- */
 console.log('\nsitemap.xml');
