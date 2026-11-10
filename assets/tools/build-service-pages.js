@@ -144,7 +144,7 @@ const FOOTER = (rel) => `<footer class="site-footer">
 
   <div class="wrap footer-base">
     <p>© <span data-year>2026</span> Skyline Solution Enterprises. All rights reserved.</p>
-    <a class="admin-link" href="${rel}admin.html">Admin</a>
+    <a class="admin-link" href="${rel}admin.html">AI</a>
   </div>
 </footer>
 

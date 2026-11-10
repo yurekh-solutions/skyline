@@ -412,7 +412,7 @@ a.desk-card:hover {
 .stars { display: inline-flex; flex-direction: row-reverse; gap: .2rem; justify-self: start; width: max-content; max-width: 100%; }
 .star { display: grid; place-items: center; min-width: 44px; min-height: 44px; font-size: 1.65rem; line-height: 1; color: rgba(16, 34, 63, .28); padding: .15rem .1rem; }
 .star span:first-child { pointer-events: none; }
-.star:hover, .star:hover ~ .star, .star.is-on { color: var(--accent); }
+.stars .star:hover, .stars .star:hover ~ .star, .stars .star.is-on { color: var(--accent); }
 
 .privacy-note { font-size: .8rem; color: var(--faint); margin-bottom: 1rem; }
 .form-actions { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; }
