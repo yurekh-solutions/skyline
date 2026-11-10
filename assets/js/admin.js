@@ -87,6 +87,7 @@
 
     initGate();
     initPasscodeToggle();
+    initThemeToggle();
     initTabs();
     initToolbar();
     initEditor();
@@ -223,6 +224,36 @@
       try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) { /* older browsers */ }
       input.focus();
     });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* light / dark theme toggle. Same localStorage key ('skyline-theme') and
+     the same data-theme="dark" attribute the public pages use, so a visitor's
+     choice carries across the whole site. Dark is the default; light only
+     when they picked it. base.css holds the palette, admin.css just maps its
+     surfaces onto those tokens.                                            */
+  var THEME_KEY = 'skyline-theme';
+  function initThemeToggle() {
+    var btn = $('[data-theme-toggle]');
+    if (!btn) return;
+    var root = document.documentElement;
+
+    function sync() {
+      var dark = root.getAttribute('data-theme') === 'dark';
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('title', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', dark ? '#0A1520' : '#eaf1f8');
+    }
+
+    btn.addEventListener('click', function () {
+      var dark = root.getAttribute('data-theme') === 'dark';
+      if (dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'dark');
+      try { localStorage.setItem(THEME_KEY, dark ? 'light' : 'dark'); } catch (e) { /* storage disabled */ }
+      sync();
+    });
+
+    sync();
   }
 
   /* ------------------------------------------------------------------ */

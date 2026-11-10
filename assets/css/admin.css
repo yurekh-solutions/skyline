@@ -66,7 +66,7 @@
   padding: 1.1rem 1.2rem;
   border-radius: var(--radius);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .52));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
 }
@@ -82,7 +82,7 @@
   margin-bottom: 1.5rem;
   border-radius: 999px;
   border: 1px solid var(--glass-line);
-  background: rgba(255, 255, 255, .62);
+  background: var(--surface-sunken);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
   scrollbar-width: thin;
@@ -101,7 +101,7 @@
 }
 .tab:hover { color: var(--navy); }
 .tab.is-active {
-  background: linear-gradient(135deg, var(--accent-lite), var(--accent-ink));
+  background: var(--accent-gradient);
   color: #fff;
   box-shadow: 0 12px 24px -16px rgba(47, 128, 237, .8), var(--shadow-in);
 }
@@ -119,7 +119,7 @@
   margin-bottom: 1.2rem;
   border-radius: var(--radius);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(155deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .48));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
 }
@@ -134,7 +134,7 @@
 .table-scroll {
   border: 1px solid var(--glass-line);
   border-radius: var(--radius-l);
-  background: rgba(255, 255, 255, .72);
+  background: var(--surface-sunken);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
   overflow: auto;
@@ -153,13 +153,13 @@
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--navy);
-  background: rgba(244, 248, 253, .94);
+  background: var(--surface-3);
   border-bottom: 1px solid var(--edge);
   white-space: nowrap;
 }
 .table tbody td { padding: .85rem .9rem; border-bottom: 1px solid var(--edge-soft); vertical-align: top; }
 .table tbody tr:last-child td { border-bottom: 0; }
-.table tbody tr:hover td { background: rgba(255, 255, 255, .72); }
+.table tbody tr:hover td { background: var(--surface-hover); }
 .table a { color: var(--navy); }
 .table a:hover { color: var(--accent-ink); }
 .table .ref { font-family: ui-monospace, Consolas, monospace; font-size: .74rem; color: var(--faint); display: block; margin-top: .2rem; }
@@ -176,7 +176,7 @@
   text-transform: uppercase;
   border: 1px solid var(--edge);
   color: var(--muted);
-  background: rgba(255, 255, 255, .7);
+  background: var(--surface-sunken);
 }
 /* status badges sat on pale tints of their own colour, which put the label
    text at 1.6-4.0:1. Tints kept for the colour-coding; the text is now a deep
@@ -196,7 +196,7 @@
   font-size: .75rem;
   font-weight: 500;
   color: var(--muted);
-  background: rgba(255, 255, 255, .8);
+  background: var(--surface-bar);
   white-space: nowrap;
 }
 .icon-btn:hover { color: var(--text); border-color: var(--accent); }
@@ -223,7 +223,7 @@ select.status-select {
     padding: 1rem;
     border: 1px solid var(--glass-line);
     border-radius: var(--radius-l);
-    background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .55));
+    background: var(--card-surface);
     box-shadow: var(--shadow-1), var(--shadow-in);
     backdrop-filter: var(--blur);
   }
@@ -246,7 +246,7 @@ select.status-select {
   color: var(--muted);
   border: 1px dashed rgba(47, 128, 237, .34);
   border-radius: var(--radius-l);
-  background: rgba(255, 255, 255, .6);
+  background: var(--surface-sunken);
   margin-top: 1rem;
 }
 
@@ -260,7 +260,7 @@ select.status-select {
   padding: 1.15rem 1.25rem;
   border-radius: var(--radius-l);
   border: 1px solid var(--glass-line);
-  background: linear-gradient(160deg, rgba(255, 255, 255, .9), rgba(250, 252, 255, .6));
+  background: var(--card-surface);
   box-shadow: var(--shadow-1), var(--shadow-in);
   backdrop-filter: var(--blur);
 }
@@ -276,7 +276,7 @@ select.status-select {
   font-weight: 600;
   font-size: .8rem;
   color: #fff;
-  background: linear-gradient(140deg, var(--accent-lite), var(--accent-ink));
+  background: var(--accent-gradient);
   box-shadow: 0 10px 20px -14px rgba(47, 128, 237, .9), var(--shadow-in);
 }
 .review-admin .review-who strong { display: block; font-family: var(--font-display); font-size: .96rem; font-weight: 600; }
@@ -326,8 +326,8 @@ body:not(.is-unlocked) [data-lock] { display: none; }
   padding: 1rem;
   border-radius: var(--radius-s);
   border: 1px solid var(--edge);
-  background: rgba(244, 248, 253, .9);
-  color: #22364d;
+  background: var(--surface-sunken);
+  color: var(--text);
   font-family: ui-monospace, Consolas, monospace;
   font-size: .74rem;
   line-height: 1.55;
@@ -433,7 +433,7 @@ body:not(.is-unlocked) [data-lock] { display: none; }
     padding: 1rem;
     border: 1px solid var(--glass-line);
     border-radius: var(--radius-l);
-    background: linear-gradient(155deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .55));
+    background: var(--card-surface);
     box-shadow: var(--shadow-1), var(--shadow-in);
     backdrop-filter: var(--blur);
   }
@@ -668,3 +668,18 @@ body:not(.is-unlocked) [data-lock] { display: none; }
     page-break-inside: avoid;
   }
 }
+
+/* ---------- dark theme ---------- */
+/* The surfaces above now come from tokens that flip in dark, but the
+   status badges, warnings and the empty star still use literal dark ink
+   that disappears on a navy card. Remap just those onto light hues. */
+[data-theme="dark"] .badge-new { color: #F3C079; border-color: rgba(243, 192, 121, .34); background: rgba(233, 180, 106, .14); }
+[data-theme="dark"] .badge-contacted { color: #8CC4FF; border-color: rgba(140, 196, 255, .34); background: rgba(108, 180, 238, .12); }
+[data-theme="dark"] .badge-closed, [data-theme="dark"] .badge-approved { color: #7FE0A8; border-color: rgba(127, 224, 168, .34); background: rgba(92, 219, 149, .12); }
+[data-theme="dark"] .badge-archived, [data-theme="dark"] .badge-hidden { color: var(--muted); background: rgba(255, 255, 255, .06); }
+[data-theme="dark"] .review-admin .rating .off { color: rgba(255, 255, 255, .28); }
+[data-theme="dark"] .warn { color: #F3CE93 !important; background: rgba(233, 180, 106, .12); }
+[data-theme="dark"] .danger-title { color: #FF9A8A !important; }
+[data-theme="dark"] .danger { color: #FF9A8A; border-color: rgba(255, 107, 107, .42); background: rgba(255, 107, 107, .1); }
+[data-theme="dark"] .danger:hover { background: rgba(255, 107, 107, .18); color: #FFB4A6; }
+[data-theme="dark"] .gate-note code, [data-theme="dark"] .store-card code, [data-theme="dark"] .pane-head code { background: rgba(140, 196, 255, .16); }

@@ -58,7 +58,10 @@ window.SITE_CONFIG = {
      folder is git-ignored, so it is never pushed).
 
      Only fill the value below if you host the site as pure static files with
-     no server — then the dashboard falls back to a local-only gate and the
-     records live in this browser alone. Leave it empty otherwise.        */
-  adminPasscode: ''
+     no server (or open admin.html straight from disk) — then the dashboard
+     falls back to a local-only gate and the records live in this browser
+     alone. When `node server.js` runs, the server verifies the passcode
+     itself and this value is ignored, so keep them matching if you want the
+     same code in both places (data/admin-passcode.txt).                     */
+  adminPasscode: 'admin@123'
 };

@@ -273,7 +273,7 @@ function servicePage(name) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-<script>(function(){try{if(localStorage.getItem('skyline-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+<script>(function(){try{if(localStorage.getItem('skyline-theme')==='light'){document.documentElement.removeAttribute('data-theme');}else{document.documentElement.setAttribute('data-theme','dark');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#0A1520');}}catch(e){}})();</script>
 <link rel="stylesheet" href="${rel}assets/css/base.css">
 <link rel="stylesheet" href="${rel}assets/css/sections.css">
 
@@ -540,7 +540,7 @@ ${extraItems}
 <link rel="icon" href="${rel}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="${rel}site.webmanifest">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-<script>(function(){try{if(localStorage.getItem('skyline-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+<script>(function(){try{if(localStorage.getItem('skyline-theme')==='light'){document.documentElement.removeAttribute('data-theme');}else{document.documentElement.setAttribute('data-theme','dark');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#0A1520');}}catch(e){}})();</script>
 <link rel="stylesheet" href="${rel}assets/css/base.css">
 <link rel="stylesheet" href="${rel}assets/css/sections.css">
 
