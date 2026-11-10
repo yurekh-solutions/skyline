@@ -1,0 +1,22 @@
+# What must never leave this machine: the live lead store and the admin
+# passcode file that server.js creates on first run.
+data/
+
+# Server source and build tooling are not part of the website. Uploaded, they
+# would simply be readable as plain text at /server.js on the CDN.
+server.js
+server*.log
+assets/tools/
+generate-all-pages.js
+generate-placeholder-images.html
+download-stock-images.md
+COMPLETE-WEBSITE-GUIDE.md
+DARK-THEME-GUIDE.md
+IMAGE-REQUIREMENTS.md
+WEBSITE-STRUCTURE.md
+
+# Deployment scratch and local noise
+.vercel-tmp/
+.vscode/
+Thumbs.db
+Desktop.ini

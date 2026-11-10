@@ -15,3 +15,4 @@ Desktop.ini
 # node
 node_modules/
 *.log
+.vercel

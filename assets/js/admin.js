@@ -171,8 +171,10 @@
           return { status: res.status, data: data };
         });
       }, function () { return { status: 0, data: {} }; }).then(function (r) {
-        /* status 0 = nothing answered, so this is static hosting */
-        if (r.status === 0) {
+        /* No API on this host. A refused request (0) or a CDN "not found"
+           page (404/405 — Vercel, Netlify, GitHub Pages answer instead of the
+           Node server) all mean static hosting, so use the local gate. */
+        if (r.status === 0 || r.status === 404 || r.status === 405) {
           if (value && value === String(CFG.adminPasscode || '')) { rememberLocal(true); unlock(); }
           else if (CFG.adminPasscode) fail('That passcode does not match. Check assets/js/config.js.');
           else fail('This site is hosted without its server, so the dashboard has nothing to log into. Run node server.js to get the shared lead store.');
